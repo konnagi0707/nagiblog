@@ -1,0 +1,26 @@
+[
+  {
+    "id": 0,
+    "title": "初めまして、小島凪紗です",
+    "date": "2024-03-15",
+    "tags": ["自我介绍", "初投稿"],
+    "content": "大家好，我是小島凪紗。这是归档原型中的示例首篇内容，可替换为真实博客文本。",
+    "sourceUrl": "https://example.com/nagisa/0"
+  },
+  {
+    "id": 1,
+    "title": "最近のこと",
+    "date": "2024-05-10",
+    "tags": ["日常", "活动"],
+    "content": "这里放置第二篇示例文章内容：例如工作花絮、活动感想、粉丝互动记录等。",
+    "sourceUrl": "https://example.com/nagisa/1"
+  },
+  {
+    "id": 2,
+    "title": "夏に向けて",
+    "date": "2024-07-01",
+    "tags": ["日常", "季节"],
+    "content": "第三篇示例内容。后续可以在数据层加入图片链接、附加字段、外链等。",
+    "sourceUrl": "https://example.com/nagisa/2"
+  }
+]

@@ -149,7 +149,14 @@ body {
 
 .sidebar {
   padding: 14px;
-  position: static;
+  position: sticky;
+  top: 14px;
+  align-self: start;
+  max-height: calc(100vh - 28px);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #9eb3bd #eef4f7;
   background: linear-gradient(180deg, #ffffff 0%, #f6fbfd 100%);
   display: grid;
   gap: 12px;
@@ -160,6 +167,24 @@ body {
   border-radius: 12px;
   padding: 12px;
   background: #fdfefe;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #eef4f7;
+  border-radius: 999px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #9eb3bd;
+  border-radius: 999px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #849ca8;
 }
 
 .sidebar h2 {
@@ -318,6 +343,7 @@ body {
 .member-panel {
   padding: 16px;
   position: static;
+  align-self: start;
   background: linear-gradient(180deg, #ffffff 0%, #f8fcfd 70%, #fff8ec 100%);
   border-top: 4px solid var(--orange);
 }
@@ -469,7 +495,7 @@ body {
 }
 
 @media (max-width: 1240px) {
-    .layout {
+  .layout {
     grid-template-columns: 290px minmax(0, 1fr);
     gap: 14px;
   }
@@ -505,11 +531,23 @@ body {
   }
 
   .layout {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     padding: 14px 12px 20px;
   }
 
+  .content-shell {
+    order: 1;
+    gap: 12px;
+  }
+
   .sidebar {
+    order: 2;
+    position: static;
+    max-height: none;
+    overflow: visible;
+    scrollbar-width: auto;
     gap: 10px;
   }
 

@@ -121,8 +121,6 @@ body {
   padding: 14px;
   position: sticky;
   top: 16px;
-  max-height: calc(100vh - 32px);
-  overflow: auto;
   background: linear-gradient(180deg, #ffffff, #f6fbfd);
 }
 
@@ -169,20 +167,23 @@ body {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 60vh;
-  overflow: auto;
+  display: grid;
+  gap: 8px;
 }
 
 .post-list button {
   width: 100%;
   text-align: left;
-  margin-bottom: 8px;
   border: 1px solid var(--border);
   background: #fff;
   border-radius: 10px;
-  padding: 10px;
+  padding: 10px 12px;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 12px;
 }
 
 .post-list button:hover,
@@ -197,6 +198,23 @@ body {
   font-size: 12px;
   color: var(--muted);
   margin-bottom: 4px;
+}
+
+.post-list .post-date {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #5e7480;
+}
+
+.post-list button strong {
+  font-size: 16px;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .content {
@@ -250,8 +268,6 @@ body {
   padding: 16px;
   position: sticky;
   top: 16px;
-  max-height: calc(100vh - 32px);
-  overflow: auto;
   background: linear-gradient(180deg, #ffffff 0%, #f8fcfd 70%, #fff7ea 100%);
   border-top: 4px solid var(--orange);
 }
@@ -424,8 +440,13 @@ body {
     max-height: none;
   }
 
-  .post-list {
-    max-height: 30vh;
+  .post-list button {
+    grid-template-columns: 1fr;
+    row-gap: 6px;
+  }
+
+  .post-list .post-date {
+    font-size: 13px;
   }
 
   .blog-paragraph {

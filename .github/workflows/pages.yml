@@ -57,7 +57,7 @@ jobs:
       - name: Prepare static files
         run: |
           mkdir -p dist
-          cp index.html styles.css app.js dist/
+          cp index.html styles.css app.js portrait.jpeg portrait.png dist/
           cp -R data dist/data
           touch dist/.nojekyll
 

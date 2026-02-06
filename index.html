@@ -9,7 +9,7 @@
   <body>
     <header class="topbar">
       <h1>小島凪紗 公式ブログ Archive</h1>
-      <p>非官方归档原型 · 支持标签过滤、关键词搜索与文章直链</p>
+      <p>非官方归档原型 · 支持标签过滤、关键词搜索、成员信息与文章直链</p>
     </header>
 
     <main class="layout">
@@ -38,9 +38,15 @@
         </section>
       </aside>
 
-      <article class="content" id="post-detail">
-        <p class="empty">正在加载文章...</p>
-      </article>
+      <section class="content-shell">
+        <article class="content" id="post-detail">
+          <p class="empty">正在加载文章...</p>
+        </article>
+
+        <aside class="member-panel" id="member-panel">
+          <p class="empty">正在加载成员资料...</p>
+        </aside>
+      </section>
     </main>
 
     <script src="app.js" defer></script>

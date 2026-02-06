@@ -1,3 +1,5 @@
+const DEFAULT_MEMBER_SOURCE_URL = "https://sakurazaka46.com/s/s46/artist/62?ima=0000";
+
 const state = {
   posts: [],
   filteredPosts: [],
@@ -6,6 +8,9 @@ const state = {
   activeId: null,
   loadingState: "loading",
   errorMessage: "",
+  member: null,
+  memberLoadingState: "loading",
+  memberErrorMessage: "",
 };
 
 const postListEl = document.getElementById("post-list");
@@ -13,6 +18,7 @@ const postDetailEl = document.getElementById("post-detail");
 const tagSelectEl = document.getElementById("tag-select");
 const keywordInputEl = document.getElementById("keyword-input");
 const listStatusEl = document.getElementById("list-status");
+const memberPanelEl = document.getElementById("member-panel");
 
 function normalizeKeyword(input) {
   return String(input ?? "").trim().toLowerCase();
@@ -47,6 +53,21 @@ function clearHash() {
   }
 }
 
+function getPostSearchText(post) {
+  if (typeof post.content === "string" && post.content.trim() !== "") {
+    return post.content;
+  }
+
+  if (!Array.isArray(post.contentBlocks)) {
+    return "";
+  }
+
+  return post.contentBlocks
+    .filter((block) => block?.type === "text" && typeof block.text === "string")
+    .map((block) => block.text)
+    .join("\n\n");
+}
+
 function filterPosts(posts, activeTag, keyword) {
   const normalizedKeyword = normalizeKeyword(keyword);
 
@@ -56,7 +77,7 @@ function filterPosts(posts, activeTag, keyword) {
 
     if (normalizedKeyword === "") return true;
 
-    const searchableText = `${post.title} ${post.content}`.toLowerCase();
+    const searchableText = `${post.title} ${getPostSearchText(post)}`.toLowerCase();
     return searchableText.includes(normalizedKeyword);
   });
 }
@@ -158,6 +179,48 @@ function renderList() {
   });
 }
 
+function appendTextBlock(container, text) {
+  const paragraphs = String(text)
+    .split(/\n{2,}/)
+    .map((segment) => segment.trim())
+    .filter(Boolean);
+
+  paragraphs.forEach((paragraphText) => {
+    const paragraphEl = document.createElement("p");
+    paragraphEl.className = "blog-paragraph";
+    paragraphEl.textContent = paragraphText;
+    container.appendChild(paragraphEl);
+  });
+}
+
+function renderPostBody(post) {
+  const bodyEl = document.createElement("div");
+  bodyEl.className = "post-body";
+
+  if (Array.isArray(post.contentBlocks) && post.contentBlocks.length > 0) {
+    post.contentBlocks.forEach((block) => {
+      if (!block || typeof block !== "object") return;
+
+      if (block.type === "text" && typeof block.text === "string" && block.text.trim()) {
+        appendTextBlock(bodyEl, block.text);
+      }
+
+      if (block.type === "image" && typeof block.src === "string" && block.src.trim()) {
+        const imgEl = document.createElement("img");
+        imgEl.className = "blog-image";
+        imgEl.src = block.src;
+        imgEl.alt = post.title;
+        imgEl.loading = "lazy";
+        bodyEl.appendChild(imgEl);
+      }
+    });
+  } else if (typeof post.content === "string" && post.content.trim()) {
+    appendTextBlock(bodyEl, post.content);
+  }
+
+  return bodyEl;
+}
+
 function renderDetail() {
   if (state.loadingState === "loading") {
     postDetailEl.innerHTML = '<p class="empty">正在加载文章...</p>';
@@ -200,8 +263,7 @@ function renderDetail() {
     tagsWrapEl.appendChild(tagEl);
   });
 
-  const contentEl = document.createElement("p");
-  contentEl.textContent = post.content;
+  const bodyEl = renderPostBody(post);
 
   const sourceWrapEl = document.createElement("p");
   const sourceLinkEl = document.createElement("a");
@@ -211,7 +273,159 @@ function renderDetail() {
   sourceLinkEl.textContent = "查看原文";
   sourceWrapEl.appendChild(sourceLinkEl);
 
-  postDetailEl.append(titleEl, dateEl, tagsWrapEl, contentEl, sourceWrapEl);
+  postDetailEl.append(titleEl, dateEl, tagsWrapEl, bodyEl, sourceWrapEl);
+}
+
+function normalizeMemberAttributes(attributes) {
+  if (!Array.isArray(attributes)) return [];
+
+  return attributes
+    .filter((item) => item && typeof item === "object")
+    .map((item) => ({
+      label: String(item.label ?? "").trim(),
+      value: String(item.value ?? "").trim(),
+    }))
+    .filter((item) => item.label !== "" && item.value !== "");
+}
+
+function renderMemberPanel() {
+  memberPanelEl.innerHTML = "";
+
+  if (state.memberLoadingState === "loading") {
+    memberPanelEl.innerHTML = '<p class="empty">正在加载成员资料...</p>';
+    return;
+  }
+
+  if (state.memberLoadingState === "error" || !state.member) {
+    const errorEl = document.createElement("p");
+    errorEl.className = "empty";
+    errorEl.textContent = state.memberErrorMessage || "成员资料加载失败。";
+
+    const sourceWrapEl = document.createElement("p");
+    sourceWrapEl.className = "member-source-link";
+    const sourceLinkEl = document.createElement("a");
+    sourceLinkEl.href = DEFAULT_MEMBER_SOURCE_URL;
+    sourceLinkEl.target = "_blank";
+    sourceLinkEl.rel = "noreferrer";
+    sourceLinkEl.textContent = "打开官方成员页";
+    sourceWrapEl.appendChild(sourceLinkEl);
+
+    memberPanelEl.append(errorEl, sourceWrapEl);
+    return;
+  }
+
+  const member = state.member;
+  const images = member.images && typeof member.images === "object" ? member.images : {};
+  const attributes = normalizeMemberAttributes(member.attributes);
+  const sourceUrl =
+    typeof member.sourceUrl === "string" && member.sourceUrl.trim() !== ""
+      ? member.sourceUrl
+      : DEFAULT_MEMBER_SOURCE_URL;
+
+  const headerEl = document.createElement("header");
+  headerEl.className = "member-header";
+
+  const nameEl = document.createElement("h3");
+  nameEl.className = "member-name";
+  nameEl.textContent = member.name || "小島 凪紗";
+
+  const kanaEl = document.createElement("p");
+  kanaEl.className = "member-kana";
+  kanaEl.textContent = member.kana || "";
+
+  headerEl.append(nameEl, kanaEl);
+  memberPanelEl.appendChild(headerEl);
+
+  const profileSrc = images.profile?.src;
+  if (typeof profileSrc === "string" && profileSrc.trim() !== "") {
+    const profileImg = document.createElement("img");
+    profileImg.className = "member-photo-main";
+    profileImg.src = profileSrc;
+    profileImg.alt = `${member.name || "小島 凪紗"} 头像`;
+    profileImg.loading = "lazy";
+    memberPanelEl.appendChild(profileImg);
+  }
+
+  if (attributes.length > 0) {
+    const infoListEl = document.createElement("dl");
+    infoListEl.className = "member-info-list";
+
+    attributes.forEach((item) => {
+      const dtEl = document.createElement("dt");
+      dtEl.textContent = item.label;
+      const ddEl = document.createElement("dd");
+      ddEl.textContent = item.value;
+      infoListEl.append(dtEl, ddEl);
+    });
+
+    memberPanelEl.appendChild(infoListEl);
+  }
+
+  const greetingCardSrc = images.greetingCard?.src;
+  const greetingPhotoSrc = images.greetingPhoto?.src;
+
+  if (
+    (typeof greetingCardSrc === "string" && greetingCardSrc.trim() !== "") ||
+    (typeof greetingPhotoSrc === "string" && greetingPhotoSrc.trim() !== "")
+  ) {
+    const greetingWrapEl = document.createElement("section");
+    greetingWrapEl.className = "member-greeting";
+
+    const titleEl = document.createElement("h4");
+    titleEl.textContent = "GREETING";
+    greetingWrapEl.appendChild(titleEl);
+
+    const gridEl = document.createElement("div");
+    gridEl.className = "member-greeting-grid";
+
+    if (typeof greetingCardSrc === "string" && greetingCardSrc.trim() !== "") {
+      const cardFigure = document.createElement("figure");
+      const cardImg = document.createElement("img");
+      cardImg.src = greetingCardSrc;
+      cardImg.alt = "Greeting Card";
+      cardImg.loading = "lazy";
+      const cardCaption = document.createElement("figcaption");
+      cardCaption.textContent = "CARD";
+      cardFigure.append(cardImg, cardCaption);
+      gridEl.appendChild(cardFigure);
+    }
+
+    if (typeof greetingPhotoSrc === "string" && greetingPhotoSrc.trim() !== "") {
+      const photoFigure = document.createElement("figure");
+      const photoImg = document.createElement("img");
+      photoImg.src = greetingPhotoSrc;
+      photoImg.alt = "Greeting Photo";
+      photoImg.loading = "lazy";
+      const photoCaption = document.createElement("figcaption");
+      photoCaption.textContent = "PHOTO";
+      photoFigure.append(photoImg, photoCaption);
+      gridEl.appendChild(photoFigure);
+    }
+
+    greetingWrapEl.appendChild(gridEl);
+    memberPanelEl.appendChild(greetingWrapEl);
+  }
+
+  const actionsEl = document.createElement("div");
+  actionsEl.className = "member-actions";
+
+  const profileLink = document.createElement("a");
+  profileLink.href = sourceUrl;
+  profileLink.target = "_blank";
+  profileLink.rel = "noreferrer";
+  profileLink.textContent = "官方成员页";
+  actionsEl.appendChild(profileLink);
+
+  if (typeof member.greetingListUrl === "string" && member.greetingListUrl.trim() !== "") {
+    const greetingListLink = document.createElement("a");
+    greetingListLink.href = member.greetingListUrl;
+    greetingListLink.target = "_blank";
+    greetingListLink.rel = "noreferrer";
+    greetingListLink.textContent = "GREETING LIST";
+    actionsEl.appendChild(greetingListLink);
+  }
+
+  memberPanelEl.appendChild(actionsEl);
 }
 
 function syncHashWithActive({ force = false } = {}) {
@@ -244,24 +458,42 @@ function applyFilter({ preferHash = false, forceHashSync = false } = {}) {
   renderDetail();
 }
 
+async function fetchJson(path) {
+  const response = await fetch(path);
+  if (!response.ok) {
+    throw new Error(`${path} HTTP ${response.status}`);
+  }
+  return response.json();
+}
+
 async function init() {
   state.loadingState = "loading";
   state.errorMessage = "";
+  state.memberLoadingState = "loading";
+  state.memberErrorMessage = "";
+
   renderStatus();
   renderDetail();
+  renderMemberPanel();
 
-  try {
-    const response = await fetch("data/posts.json");
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
+  const [postsResult, memberResult] = await Promise.allSettled([
+    fetchJson("data/posts.json"),
+    fetchJson("data/member.json"),
+  ]);
 
-    const posts = await response.json();
-    if (!Array.isArray(posts)) {
-      throw new Error("数据格式错误：posts.json 不是数组");
-    }
+  if (memberResult.status === "fulfilled" && memberResult.value && typeof memberResult.value === "object") {
+    state.member = memberResult.value;
+    state.memberLoadingState = "ready";
+  } else {
+    state.member = null;
+    state.memberLoadingState = "error";
+    state.memberErrorMessage = "成员资料暂时不可用。";
+    console.error("[archive] member init failed:", memberResult.status === "rejected" ? memberResult.reason : memberResult.value);
+  }
+  renderMemberPanel();
 
-    state.posts = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date));
+  if (postsResult.status === "fulfilled" && Array.isArray(postsResult.value)) {
+    state.posts = [...postsResult.value].sort((a, b) => new Date(b.date) - new Date(a.date));
     state.loadingState = "ready";
 
     renderTagOptions(state.posts);
@@ -271,19 +503,20 @@ async function init() {
       preferHash: true,
       forceHashSync: hadHash,
     });
-  } catch (error) {
-    state.loadingState = "error";
-    state.errorMessage = "数据加载失败，请稍后重试。";
-    state.posts = [];
-    state.filteredPosts = [];
-    state.activeId = null;
-
-    renderList();
-    renderStatus();
-    renderDetail();
-
-    console.error("[archive] init failed:", error);
+    return;
   }
+
+  state.loadingState = "error";
+  state.errorMessage = "数据加载失败，请稍后重试。";
+  state.posts = [];
+  state.filteredPosts = [];
+  state.activeId = null;
+
+  renderList();
+  renderStatus();
+  renderDetail();
+
+  console.error("[archive] posts init failed:", postsResult.status === "rejected" ? postsResult.reason : postsResult.value);
 }
 
 tagSelectEl.addEventListener("change", (event) => {

@@ -1,1 +1,7 @@
 .DS_Store
+__pycache__/
+
+data/posts.json
+data/member.json
+data/images/
+data/member/

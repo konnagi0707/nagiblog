@@ -1,7 +1,10 @@
 const DEFAULT_MEMBER_SOURCE_URL = "https://sakurazaka46.com/s/s46/artist/62?ima=0000";
+const LOCALE_STORAGE_KEY = "nagiblog_locale";
+const SUPPORTED_LOCALES = ["zh-Hans", "zh-Hant", "en", "ja", "ko"];
 
 const I18N = {
   "zh-Hans": {
+    language: "语言",
     filter: "筛选",
     timeline: "时间线",
     tag: "标签",
@@ -25,6 +28,7 @@ const I18N = {
     photo: "照片",
   },
   "zh-Hant": {
+    language: "語言",
     filter: "篩選",
     timeline: "時間線",
     tag: "標籤",
@@ -48,6 +52,7 @@ const I18N = {
     photo: "照片",
   },
   en: {
+    language: "Language",
     filter: "Filters",
     timeline: "Timeline",
     tag: "Tag",
@@ -71,6 +76,7 @@ const I18N = {
     photo: "Photo",
   },
   ja: {
+    language: "言語",
     filter: "絞り込み",
     timeline: "タイムライン",
     tag: "タグ",
@@ -94,6 +100,7 @@ const I18N = {
     photo: "写真",
   },
   ko: {
+    language: "언어",
     filter: "필터",
     timeline: "타임라인",
     tag: "태그",
@@ -117,6 +124,10 @@ const I18N = {
     photo: "사진",
   },
 };
+
+function isSupportedLocaleKey(localeKey) {
+  return SUPPORTED_LOCALES.includes(localeKey);
+}
 
 function normalizeLocale(rawLocale) {
   if (!rawLocale || typeof rawLocale !== "string") return null;
@@ -148,10 +159,34 @@ function detectLocaleKey() {
 
   for (const candidate of candidates) {
     const normalized = normalizeLocale(candidate);
-    if (normalized) return normalized;
+    if (normalized && isSupportedLocaleKey(normalized)) return normalized;
   }
 
   return "zh-Hans";
+}
+
+function getStoredLocaleKey() {
+  try {
+    const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
+    if (isSupportedLocaleKey(stored)) {
+      return stored;
+    }
+  } catch {
+    // ignore storage failures
+  }
+  return null;
+}
+
+function getInitialLocaleKey() {
+  return getStoredLocaleKey() || detectLocaleKey();
+}
+
+function persistLocaleKey(localeKey) {
+  try {
+    localStorage.setItem(LOCALE_STORAGE_KEY, localeKey);
+  } catch {
+    // ignore storage failures
+  }
 }
 
 function htmlLangFromLocale(localeKey) {
@@ -161,7 +196,7 @@ function htmlLangFromLocale(localeKey) {
 }
 
 const state = {
-  localeKey: detectLocaleKey(),
+  localeKey: getInitialLocaleKey(),
   posts: [],
   filteredPosts: [],
   activeTag: "all",
@@ -192,6 +227,8 @@ const filterTitleEl = document.getElementById("filter-title");
 const timelineTitleEl = document.getElementById("timeline-title");
 const tagLabelEl = document.getElementById("tag-label");
 const keywordLabelEl = document.getElementById("keyword-label");
+const languageLabelEl = document.getElementById("language-label");
+const languageSwitchEl = document.getElementById("language-switch");
 
 function applyStaticI18n() {
   document.documentElement.lang = htmlLangFromLocale(state.localeKey);
@@ -201,6 +238,19 @@ function applyStaticI18n() {
   if (tagLabelEl) tagLabelEl.textContent = t("tag");
   if (keywordLabelEl) keywordLabelEl.textContent = t("keyword");
   if (keywordInputEl) keywordInputEl.placeholder = t("keywordPlaceholder");
+  if (languageLabelEl) languageLabelEl.textContent = t("language");
+}
+
+function renderLanguageSwitcher() {
+  if (!languageSwitchEl) return;
+
+  const buttons = languageSwitchEl.querySelectorAll("button[data-locale]");
+  buttons.forEach((button) => {
+    const locale = button.getAttribute("data-locale");
+    const isActive = locale === state.localeKey;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
 }
 
 function normalizeKeyword(input) {
@@ -281,6 +331,7 @@ function resolveActiveId(filteredPosts, preferredId, hashId) {
 
 function renderTagOptions(posts) {
   tagSelectEl.innerHTML = "";
+
   const allOption = document.createElement("option");
   allOption.value = "all";
   allOption.textContent = t("all");
@@ -297,6 +348,12 @@ function renderTagOptions(posts) {
       option.textContent = tag;
       tagSelectEl.appendChild(option);
     });
+
+  if (!Array.from(tagSelectEl.options).some((option) => option.value === state.activeTag)) {
+    state.activeTag = "all";
+  }
+
+  tagSelectEl.value = state.activeTag;
 }
 
 function renderStatus() {
@@ -640,6 +697,43 @@ function applyFilter({ preferHash = false, forceHashSync = false } = {}) {
   renderDetail();
 }
 
+function setLocale(localeKey, { persist = true } = {}) {
+  if (!isSupportedLocaleKey(localeKey)) return;
+
+  if (state.localeKey === localeKey) {
+    if (persist) persistLocaleKey(localeKey);
+    renderLanguageSwitcher();
+    return;
+  }
+
+  state.localeKey = localeKey;
+  if (persist) persistLocaleKey(localeKey);
+
+  applyStaticI18n();
+  renderLanguageSwitcher();
+
+  if (state.posts.length > 0) {
+    renderTagOptions(state.posts);
+  }
+
+  renderStatus();
+  renderDetail();
+  renderMemberPanel();
+}
+
+function initializeLanguageSwitcher() {
+  if (!languageSwitchEl) return;
+
+  const buttons = languageSwitchEl.querySelectorAll("button[data-locale]");
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const locale = button.getAttribute("data-locale");
+      if (!locale) return;
+      setLocale(locale, { persist: true });
+    });
+  });
+}
+
 async function fetchJson(path) {
   const response = await fetch(path);
   if (!response.ok) {
@@ -650,6 +744,8 @@ async function fetchJson(path) {
 
 async function init() {
   applyStaticI18n();
+  initializeLanguageSwitcher();
+  renderLanguageSwitcher();
 
   state.loadingState = "loading";
   state.errorMessage = "";

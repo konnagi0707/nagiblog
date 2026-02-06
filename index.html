@@ -11,22 +11,27 @@
   </head>
   <body>
     <header class="topbar">
-      <h1>小島凪紗 公式ブログ Archive</h1>
-      <div class="language-switch-wrap">
-        <span id="language-label" class="language-label">语言</span>
-        <div id="language-switch" class="language-switch" role="group" aria-label="Language switch">
-          <button type="button" class="lang-btn" data-locale="zh-Hans">简</button>
-          <button type="button" class="lang-btn" data-locale="zh-Hant">繁</button>
-          <button type="button" class="lang-btn" data-locale="en">EN</button>
-          <button type="button" class="lang-btn" data-locale="ja">日</button>
-          <button type="button" class="lang-btn" data-locale="ko">한</button>
+      <div class="topbar-inner">
+        <div class="topbar-brand">
+          <img src="portrait.png" alt="小島凪紗" class="topbar-avatar" />
+          <h1>小島凪紗 公式ブログ Archive</h1>
+        </div>
+        <div class="language-switch-wrap">
+          <span id="language-label" class="language-label">语言</span>
+          <div id="language-switch" class="language-switch" role="group" aria-label="Language switch">
+            <button type="button" class="lang-btn" data-locale="zh-Hans">简</button>
+            <button type="button" class="lang-btn" data-locale="zh-Hant">繁</button>
+            <button type="button" class="lang-btn" data-locale="en">EN</button>
+            <button type="button" class="lang-btn" data-locale="ja">日</button>
+            <button type="button" class="lang-btn" data-locale="ko">한</button>
+          </div>
         </div>
       </div>
     </header>
 
     <main class="layout">
       <aside class="sidebar">
-        <section>
+        <section class="sidebar-section sidebar-filter">
           <h2 id="filter-title">筛选</h2>
           <label id="tag-label" for="tag-select">标签</label>
           <select id="tag-select">
@@ -44,7 +49,7 @@
           <p id="list-status" class="status-message" aria-live="polite"></p>
         </section>
 
-        <section>
+        <section class="sidebar-section sidebar-timeline">
           <h2 id="timeline-title">时间线</h2>
           <ul id="post-list" class="post-list"></ul>
         </section>

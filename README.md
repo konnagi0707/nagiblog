@@ -1,6 +1,6 @@
 # Nagisa Blog Archive
 
-一个面向 **小島凪紗公式ブログ** 的前端归档项目原型，当前支持：
+一个面向 **小島凪紗公式ブログ** 的前端归档项目，当前支持：
 
 - 统一时间线浏览
 - 标签过滤
@@ -11,17 +11,30 @@
 ## 本地预览
 
 ```bash
+cd "/Users/yanq1201/Documents/nagiblog"
 python3 -m http.server 8000
 ```
 
 然后打开 `http://localhost:8000`。
+
+## 同步真实博客数据
+
+已内置抓取脚本，可从櫻坂46官方站点抓取小島凪紗全部公开博客并写入 `data/posts.json`。
+
+```bash
+cd "/Users/yanq1201/Documents/nagiblog"
+python3 scripts/fetch_nagisa_blog.py --output data/posts.json
+```
+
+当前数据规模：`93` 篇（最新抓取结果）。
 
 ## 目录结构
 
 - `index.html`：页面结构
 - `styles.css`：页面样式
 - `app.js`：归档交互逻辑（加载、过滤、渲染、hash 路由）
-- `data/posts.json`：示例数据
+- `data/posts.json`：真实博客数据
+- `scripts/fetch_nagisa_blog.py`：抓取脚本
 - `.spec-workflow/`：Spec Workflow 文档（中文）
 
 ## Spec Coding（按 spec-workflow-mcp）
@@ -66,18 +79,11 @@ Dashboard 默认地址：`http://localhost:5000`
 - `请根据已批准的 requirements 生成 design 文档。`
 - `请根据 design 生成 tasks，并按优先级从任务 1 开始实现。`
 
-## 手动回归清单
+## 手动回归清单（真实数据）
 
-1. 启动页面后，左侧显示时间线，右侧默认显示最新文章详情。
-2. 标签选择 `季节` 后，仅保留 1 篇文章，标题为 `夏に向けて`。
-3. 标签切回 `全部`，关键词输入 `最近` 后，仅保留标题 `最近のこと`。
-4. 同时设置 `标签=日常` 与关键词 `第二篇`，结果仍应命中 `最近のこと`。
-5. 打开 `http://localhost:8000/#0`，应直接展示 `初めまして、小島凪紗です`。
-6. 打开 `http://localhost:8000/#999`，应自动回退到可见列表第一篇并修正 hash。
-7. 手动把 `data/posts.json` 改名后刷新页面，应显示“数据加载失败”。
-
-## 下一步建议
-
-1. 对接真实博客数据源（手动抓取、RSS、API 或爬虫导出 JSON）。
-2. 按 `.spec-workflow/specs/archive-search-experience/tasks.md` 继续迭代任务。
-3. 增加自动化测试（过滤函数 + hash 行为 + 异常状态）。
+1. 打开页面后，左侧列表文章数应在 `90+`，右侧默认显示最新文章详情。
+2. 标签选择 `2026-01`，列表应至少有 1 篇，且可看到标题 `1月❄️`。
+3. 标签切回 `全部`，关键词输入 `皆さん初めまして`，应能命中最早期自我介绍文章。
+4. 打开 `http://localhost:8000/#52533`，应直达对应文章详情。
+5. 打开 `http://localhost:8000/#9999999`，应自动回退到有效文章并修正 hash。
+6. 临时将 `data/posts.json` 改名后刷新页面，应显示“数据加载失败”。

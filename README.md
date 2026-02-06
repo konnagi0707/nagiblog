@@ -17,6 +17,15 @@ python3 -m http.server 8000
 
 然后打开 `http://localhost:8000`。
 
+## GitHub Pages 部署
+
+已配置自动部署工作流：`/.github/workflows/pages.yml`。
+
+- 推送到 `main` 后会自动发布
+- 默认访问地址：`https://konnagi0707.github.io/nagiblog/`
+
+如果是第一次启用 GitHub Pages，请在仓库 Settings -> Pages 中确认 Source 为 `GitHub Actions`。
+
 ## 同步真实博客数据
 
 已内置抓取脚本，可从櫻坂46官方站点抓取小島凪紗全部公开博客并写入 `data/posts.json`。

@@ -16,21 +16,36 @@
           <img src="portrait.png" alt="小島凪紗" class="topbar-avatar" />
           <h1>小島凪紗 公式ブログ Archive</h1>
         </div>
-        <div class="language-switch-wrap">
-          <span id="language-label" class="language-label">语言</span>
-          <div id="language-switch" class="language-switch" role="group" aria-label="Language switch">
-            <button type="button" class="lang-btn" data-locale="zh-Hans">简</button>
-            <button type="button" class="lang-btn" data-locale="zh-Hant">繁</button>
-            <button type="button" class="lang-btn" data-locale="en">EN</button>
-            <button type="button" class="lang-btn" data-locale="ja">日</button>
-            <button type="button" class="lang-btn" data-locale="ko">한</button>
+
+        <div class="topbar-controls">
+          <div class="language-switch-wrap">
+            <span id="language-label" class="language-label">语言</span>
+            <div id="language-switch" class="language-switch" role="group" aria-label="Language switch">
+              <button type="button" class="lang-btn" data-locale="zh-Hans">简</button>
+              <button type="button" class="lang-btn" data-locale="zh-Hant">繁</button>
+              <button type="button" class="lang-btn" data-locale="en">EN</button>
+              <button type="button" class="lang-btn" data-locale="ja">日</button>
+              <button type="button" class="lang-btn" data-locale="ko">한</button>
+            </div>
+          </div>
+
+          <div class="mobile-drawer-actions">
+            <button id="open-filter-drawer" class="mobile-action-btn" type="button">筛选</button>
+            <button id="open-member-drawer" class="mobile-action-btn" type="button">成员</button>
           </div>
         </div>
       </div>
     </header>
 
+    <button id="drawer-backdrop" class="drawer-backdrop" type="button" aria-label="Close panels"></button>
+
     <main class="layout">
       <aside class="sidebar">
+        <div class="drawer-mobile-bar">
+          <span id="filter-drawer-title">筛选与时间线</span>
+          <button type="button" class="drawer-close-btn" data-drawer-close aria-label="close">×</button>
+        </div>
+
         <section class="sidebar-section sidebar-filter">
           <h2 id="filter-title">筛选</h2>
           <label id="tag-label" for="tag-select">标签</label>
@@ -61,7 +76,13 @@
         </article>
 
         <aside class="member-panel" id="member-panel">
-          <p class="empty">正在加载成员资料...</p>
+          <div class="drawer-mobile-bar">
+            <span id="member-drawer-title">成员信息</span>
+            <button type="button" class="drawer-close-btn" data-drawer-close aria-label="close">×</button>
+          </div>
+          <div id="member-panel-body">
+            <p class="empty">正在加载成员资料...</p>
+          </div>
         </aside>
       </section>
     </main>

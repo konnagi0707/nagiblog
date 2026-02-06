@@ -26,6 +26,9 @@ const I18N = {
     greeting: "问候",
     card: "卡片",
     photo: "照片",
+    member: "成员",
+    filterTimeline: "筛选与时间线",
+    closePanel: "关闭",
   },
   "zh-Hant": {
     language: "語言",
@@ -50,6 +53,9 @@ const I18N = {
     greeting: "問候",
     card: "卡片",
     photo: "照片",
+    member: "成員",
+    filterTimeline: "篩選與時間線",
+    closePanel: "關閉",
   },
   en: {
     language: "Language",
@@ -74,6 +80,9 @@ const I18N = {
     greeting: "Greeting",
     card: "Card",
     photo: "Photo",
+    member: "Member",
+    filterTimeline: "Filters & Timeline",
+    closePanel: "Close",
   },
   ja: {
     language: "言語",
@@ -98,6 +107,9 @@ const I18N = {
     greeting: "グリーティング",
     card: "カード",
     photo: "写真",
+    member: "メンバー",
+    filterTimeline: "絞り込みとタイムライン",
+    closePanel: "閉じる",
   },
   ko: {
     language: "언어",
@@ -122,6 +134,9 @@ const I18N = {
     greeting: "그리팅",
     card: "카드",
     photo: "사진",
+    member: "멤버",
+    filterTimeline: "필터 및 타임라인",
+    closePanel: "닫기",
   },
 };
 
@@ -223,12 +238,19 @@ const tagSelectEl = document.getElementById("tag-select");
 const keywordInputEl = document.getElementById("keyword-input");
 const listStatusEl = document.getElementById("list-status");
 const memberPanelEl = document.getElementById("member-panel");
+const memberPanelBodyEl = document.getElementById("member-panel-body");
 const filterTitleEl = document.getElementById("filter-title");
 const timelineTitleEl = document.getElementById("timeline-title");
 const tagLabelEl = document.getElementById("tag-label");
 const keywordLabelEl = document.getElementById("keyword-label");
 const languageLabelEl = document.getElementById("language-label");
 const languageSwitchEl = document.getElementById("language-switch");
+const mobileFilterButtonEl = document.getElementById("open-filter-drawer");
+const mobileMemberButtonEl = document.getElementById("open-member-drawer");
+const filterDrawerTitleEl = document.getElementById("filter-drawer-title");
+const memberDrawerTitleEl = document.getElementById("member-drawer-title");
+const drawerBackdropEl = document.getElementById("drawer-backdrop");
+const drawerCloseEls = document.querySelectorAll("[data-drawer-close]");
 
 function applyStaticI18n() {
   document.documentElement.lang = htmlLangFromLocale(state.localeKey);
@@ -239,6 +261,15 @@ function applyStaticI18n() {
   if (keywordLabelEl) keywordLabelEl.textContent = t("keyword");
   if (keywordInputEl) keywordInputEl.placeholder = t("keywordPlaceholder");
   if (languageLabelEl) languageLabelEl.textContent = t("language");
+  if (mobileFilterButtonEl) mobileFilterButtonEl.textContent = t("filter");
+  if (mobileMemberButtonEl) mobileMemberButtonEl.textContent = t("member");
+  if (filterDrawerTitleEl) filterDrawerTitleEl.textContent = t("filterTimeline");
+  if (memberDrawerTitleEl) memberDrawerTitleEl.textContent = t("member");
+  if (drawerBackdropEl) drawerBackdropEl.setAttribute("aria-label", t("closePanel"));
+
+  drawerCloseEls.forEach((button) => {
+    button.setAttribute("aria-label", t("closePanel"));
+  });
 }
 
 function renderLanguageSwitcher() {
@@ -251,6 +282,74 @@ function renderLanguageSwitcher() {
     button.classList.toggle("active", isActive);
     button.setAttribute("aria-pressed", isActive ? "true" : "false");
   });
+}
+
+function setDrawerButtonState() {
+  const filterOpen = document.body.classList.contains("drawer-filter-open");
+  const memberOpen = document.body.classList.contains("drawer-member-open");
+
+  if (mobileFilterButtonEl) {
+    mobileFilterButtonEl.setAttribute("aria-expanded", filterOpen ? "true" : "false");
+  }
+
+  if (mobileMemberButtonEl) {
+    mobileMemberButtonEl.setAttribute("aria-expanded", memberOpen ? "true" : "false");
+  }
+}
+
+function closeDrawers() {
+  document.body.classList.remove("drawer-filter-open", "drawer-member-open");
+  setDrawerButtonState();
+}
+
+function openFilterDrawer() {
+  const isOpen = document.body.classList.contains("drawer-filter-open");
+  closeDrawers();
+  if (!isOpen) {
+    document.body.classList.add("drawer-filter-open");
+  }
+  setDrawerButtonState();
+}
+
+function openMemberDrawer() {
+  const isOpen = document.body.classList.contains("drawer-member-open");
+  closeDrawers();
+  if (!isOpen) {
+    document.body.classList.add("drawer-member-open");
+  }
+  setDrawerButtonState();
+}
+
+function initializeMobileDrawers() {
+  if (mobileFilterButtonEl) {
+    mobileFilterButtonEl.addEventListener("click", openFilterDrawer);
+  }
+
+  if (mobileMemberButtonEl) {
+    mobileMemberButtonEl.addEventListener("click", openMemberDrawer);
+  }
+
+  if (drawerBackdropEl) {
+    drawerBackdropEl.addEventListener("click", closeDrawers);
+  }
+
+  drawerCloseEls.forEach((button) => {
+    button.addEventListener("click", closeDrawers);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeDrawers();
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 960) {
+      closeDrawers();
+    }
+  });
+
+  setDrawerButtonState();
 }
 
 function normalizeKeyword(input) {
@@ -416,6 +515,7 @@ function renderList() {
       renderList();
       renderDetail();
       renderStatus();
+      closeDrawers();
     });
 
     li.appendChild(button);
@@ -528,10 +628,13 @@ function normalizeMemberAttributes(attributes) {
 }
 
 function renderMemberPanel() {
-  memberPanelEl.innerHTML = "";
+  const panelBodyEl = memberPanelBodyEl || memberPanelEl;
+  if (!panelBodyEl) return;
+
+  panelBodyEl.innerHTML = "";
 
   if (state.memberLoadingState === "loading") {
-    memberPanelEl.innerHTML = `<p class="empty">${t("loadingMember")}</p>`;
+    panelBodyEl.innerHTML = `<p class="empty">${t("loadingMember")}</p>`;
     return;
   }
 
@@ -549,7 +652,7 @@ function renderMemberPanel() {
     sourceLinkEl.textContent = t("openOfficialPage");
     sourceWrapEl.appendChild(sourceLinkEl);
 
-    memberPanelEl.append(errorEl, sourceWrapEl);
+    panelBodyEl.append(errorEl, sourceWrapEl);
     return;
   }
 
@@ -573,7 +676,7 @@ function renderMemberPanel() {
   kanaEl.textContent = member.kana || "";
 
   headerEl.append(nameEl, kanaEl);
-  memberPanelEl.appendChild(headerEl);
+  panelBodyEl.appendChild(headerEl);
 
   const profileSrc = images.profile?.src;
   if (typeof profileSrc === "string" && profileSrc.trim() !== "") {
@@ -582,7 +685,7 @@ function renderMemberPanel() {
     profileImg.src = profileSrc;
     profileImg.alt = `${member.name || "小島 凪紗"} 头像`;
     profileImg.loading = "lazy";
-    memberPanelEl.appendChild(profileImg);
+    panelBodyEl.appendChild(profileImg);
   }
 
   if (attributes.length > 0) {
@@ -597,7 +700,7 @@ function renderMemberPanel() {
       infoListEl.append(dtEl, ddEl);
     });
 
-    memberPanelEl.appendChild(infoListEl);
+    panelBodyEl.appendChild(infoListEl);
   }
 
   const greetingCardSrc = images.greetingCard?.src;
@@ -642,7 +745,7 @@ function renderMemberPanel() {
     }
 
     greetingWrapEl.appendChild(gridEl);
-    memberPanelEl.appendChild(greetingWrapEl);
+    panelBodyEl.appendChild(greetingWrapEl);
   }
 
   const actionsEl = document.createElement("div");
@@ -664,7 +767,7 @@ function renderMemberPanel() {
     actionsEl.appendChild(greetingListLink);
   }
 
-  memberPanelEl.appendChild(actionsEl);
+  panelBodyEl.appendChild(actionsEl);
 }
 
 function syncHashWithActive({ force = false } = {}) {
@@ -745,7 +848,9 @@ async function fetchJson(path) {
 async function init() {
   applyStaticI18n();
   initializeLanguageSwitcher();
+  initializeMobileDrawers();
   renderLanguageSwitcher();
+  closeDrawers();
 
   state.loadingState = "loading";
   state.errorMessage = "";

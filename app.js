@@ -178,7 +178,7 @@ function getStoredLocaleKey() {
 }
 
 function getInitialLocaleKey() {
-  return getStoredLocaleKey() || detectLocaleKey();
+  return getStoredLocaleKey() || "zh-Hans";
 }
 
 function persistLocaleKey(localeKey) {

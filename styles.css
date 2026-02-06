@@ -1,13 +1,16 @@
 :root {
   color-scheme: light;
-  --bg: #f7f8fb;
+  --blue: #aec6cf;
+  --orange: #ffa500;
+  --bg: #f3f7f9;
   --panel: #ffffff;
-  --text: #1e2430;
-  --muted: #667085;
-  --accent: #6849ff;
-  --border: #e6e8ef;
+  --text: #1f2d35;
+  --muted: #667780;
+  --accent: var(--orange);
+  --border: #cfe0e6;
   --danger: #b42318;
-  --soft-pink: #f08aa8;
+  --soft-blue: #e9f2f5;
+  --soft-orange: #fff4e1;
 }
 
 * {
@@ -17,34 +20,46 @@
 body {
   margin: 0;
   font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "YuGothic", "PingFang SC", "Microsoft YaHei", sans-serif;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 10% 0%, #f7fbfd 0, transparent 46%),
+    radial-gradient(circle at 100% 0%, #fff5e8 0, transparent 40%),
+    var(--bg);
   color: var(--text);
 }
 
 .topbar {
-  padding: 18px 24px;
-  background: linear-gradient(120deg, #f5f2ff, #eef3ff);
+  padding: 16px 24px;
+  background: linear-gradient(120deg, #e8f2f6 0%, #f8fbfd 60%, #fff4e2 100%);
   border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+  box-shadow: 0 1px 0 rgba(174, 198, 207, 0.35);
 }
 
 .topbar h1 {
   margin: 0;
   font-size: clamp(20px, 2.1vw, 24px);
+  color: #284653;
+  letter-spacing: 0.02em;
 }
 
 .language-switch-wrap {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  padding: 4px 6px;
+  border-radius: 999px;
+  border: 1px solid #d7e5ea;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
 }
 
 .language-label {
   font-size: 12px;
   color: var(--muted);
+  margin-left: 4px;
 }
 
 .language-switch {
@@ -64,16 +79,16 @@ body {
   height: 28px;
   border-radius: 999px;
   font-size: 12px;
-  color: #415067;
+  color: #3e5560;
   cursor: pointer;
 }
 
 .lang-btn:hover {
-  background: #f3f6ff;
+  background: #eef6f9;
 }
 
 .lang-btn.active {
-  background: #1f2a44;
+  background: var(--orange);
   color: #fff;
 }
 
@@ -81,7 +96,7 @@ body {
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
   gap: 16px;
-  padding: 20px 16px;
+  padding: 18px 16px;
   max-width: 1560px;
   margin: 0 auto;
 }
@@ -98,26 +113,41 @@ body {
 .member-panel {
   background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(35, 59, 74, 0.06);
 }
 
 .sidebar {
-  padding: 12px;
+  padding: 14px;
+  position: sticky;
+  top: 16px;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  background: linear-gradient(180deg, #ffffff, #f6fbfd);
 }
 
 .sidebar h2 {
   margin: 8px 0;
   font-size: 16px;
+  color: #2a4a56;
 }
 
 #tag-select,
 #keyword-input {
   width: 100%;
-  padding: 8px;
+  padding: 8px 10px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 10px;
   margin-bottom: 12px;
   background: #fff;
+  color: var(--text);
+}
+
+#tag-select:focus,
+#keyword-input:focus {
+  outline: 0;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.14);
 }
 
 #keyword-input {
@@ -131,10 +161,6 @@ body {
   color: var(--muted);
 }
 
-.status-message.info {
-  color: var(--muted);
-}
-
 .status-message.error {
   color: var(--danger);
 }
@@ -143,7 +169,7 @@ body {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 70vh;
+  max-height: 60vh;
   overflow: auto;
 }
 
@@ -153,15 +179,17 @@ body {
   margin-bottom: 8px;
   border: 1px solid var(--border);
   background: #fff;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 10px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .post-list button:hover,
 .post-list button.active {
-  border-color: var(--accent);
-  background: #f4f1ff;
+  border-color: var(--orange);
+  background: var(--soft-orange);
+  transform: translateY(-1px);
 }
 
 .post-date {
@@ -172,8 +200,9 @@ body {
 }
 
 .content {
-  padding: clamp(20px, 2.8vw, 36px);
+  padding: clamp(18px, 2.4vw, 30px);
   min-height: 75vh;
+  border-top: 4px solid var(--blue);
 }
 
 .content h2 {
@@ -188,9 +217,9 @@ body {
 }
 
 .tag {
-  background: #f3f4f9;
+  background: var(--soft-blue);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 999px;
   padding: 4px 10px;
   font-size: 12px;
 }
@@ -214,16 +243,17 @@ body {
   max-width: min(100%, 780px);
   height: auto;
   margin: clamp(14px, 2.2vw, 24px) auto;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .member-panel {
   padding: 16px;
   position: sticky;
   top: 16px;
-  max-height: calc(100vh - 36px);
+  max-height: calc(100vh - 32px);
   overflow: auto;
-  background: linear-gradient(180deg, #ffffff, #fbfbff);
+  background: linear-gradient(180deg, #ffffff 0%, #f8fcfd 70%, #fff7ea 100%);
+  border-top: 4px solid var(--orange);
 }
 
 .member-header {
@@ -235,6 +265,7 @@ body {
   font-size: 30px;
   line-height: 1.1;
   letter-spacing: 0.01em;
+  color: #264552;
 }
 
 .member-kana {
@@ -270,7 +301,7 @@ body {
 }
 
 .member-info-list dt {
-  color: var(--soft-pink);
+  color: #e78f00;
   font-weight: 600;
 }
 
@@ -284,8 +315,9 @@ body {
 
 .member-greeting h4 {
   margin: 0 0 10px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   font-size: 18px;
+  color: #2b4a56;
 }
 
 .member-greeting-grid {
@@ -326,20 +358,22 @@ body {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  color: #2f3747;
+  border-radius: 10px;
+  border: 1px solid #f1cf98;
+  color: #6b4a09;
   text-decoration: none;
-  min-height: 36px;
+  min-height: 38px;
   padding: 0 12px;
-  background: #fff;
+  background: #fff8ea;
   font-size: 13px;
+  transition: all 0.2s ease;
 }
 
 .member-actions a:hover,
 .member-source-link a:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--orange);
+  color: #fff;
+  background: var(--orange);
 }
 
 .member-source-link {
@@ -376,8 +410,18 @@ body {
     padding: 14px 16px;
   }
 
+  .language-switch-wrap {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .layout {
     grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    max-height: none;
   }
 
   .post-list {

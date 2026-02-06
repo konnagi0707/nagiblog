@@ -4,24 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>小島凪紗 公式ブログ Archive</title>
+    <link rel="icon" href="portrait.jpeg" type="image/jpeg" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="topbar">
       <h1>小島凪紗 公式ブログ Archive</h1>
-      <p>非官方归档原型 · 支持标签过滤、关键词搜索、成员信息与文章直链</p>
     </header>
 
     <main class="layout">
       <aside class="sidebar">
         <section>
-          <h2>筛选</h2>
-          <label for="tag-select">标签</label>
+          <h2 id="filter-title">筛选</h2>
+          <label id="tag-label" for="tag-select">标签</label>
           <select id="tag-select">
             <option value="all">全部</option>
           </select>
 
-          <label for="keyword-input">关键词</label>
+          <label id="keyword-label" for="keyword-input">关键词</label>
           <input
             id="keyword-input"
             type="search"
@@ -33,7 +33,7 @@
         </section>
 
         <section>
-          <h2>时间线</h2>
+          <h2 id="timeline-title">时间线</h2>
           <ul id="post-list" class="post-list"></ul>
         </section>
       </aside>

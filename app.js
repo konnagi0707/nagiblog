@@ -1,6 +1,167 @@
 const DEFAULT_MEMBER_SOURCE_URL = "https://sakurazaka46.com/s/s46/artist/62?ima=0000";
 
+const I18N = {
+  "zh-Hans": {
+    filter: "筛选",
+    timeline: "时间线",
+    tag: "标签",
+    keyword: "关键词",
+    keywordPlaceholder: "搜索标题或正文",
+    all: "全部",
+    loadingPosts: "正在加载文章...",
+    loadError: "数据加载失败，请稍后重试。",
+    noPosts: "暂无文章数据。",
+    noMatches: "当前筛选条件下没有匹配文章。",
+    postCount: "共 {count} 篇文章",
+    noVisibleContent: "当前筛选条件下没有可展示内容。",
+    viewSource: "查看原文",
+    loadingMember: "正在加载成员资料...",
+    memberLoadFailed: "成员资料暂时不可用。",
+    memberProfileFail: "成员资料加载失败。",
+    openOfficialPage: "成员官方页",
+    greetingList: "问候列表",
+    greeting: "问候",
+    card: "卡片",
+    photo: "照片",
+  },
+  "zh-Hant": {
+    filter: "篩選",
+    timeline: "時間線",
+    tag: "標籤",
+    keyword: "關鍵詞",
+    keywordPlaceholder: "搜尋標題或正文",
+    all: "全部",
+    loadingPosts: "正在載入文章...",
+    loadError: "資料載入失敗，請稍後重試。",
+    noPosts: "暫無文章資料。",
+    noMatches: "目前篩選條件下沒有匹配文章。",
+    postCount: "共 {count} 篇文章",
+    noVisibleContent: "目前篩選條件下沒有可展示內容。",
+    viewSource: "檢視原文",
+    loadingMember: "正在載入成員資料...",
+    memberLoadFailed: "成員資料暫時不可用。",
+    memberProfileFail: "成員資料載入失敗。",
+    openOfficialPage: "成員官方頁",
+    greetingList: "問候列表",
+    greeting: "問候",
+    card: "卡片",
+    photo: "照片",
+  },
+  en: {
+    filter: "Filters",
+    timeline: "Timeline",
+    tag: "Tag",
+    keyword: "Keyword",
+    keywordPlaceholder: "Search title or content",
+    all: "All",
+    loadingPosts: "Loading posts...",
+    loadError: "Failed to load data. Please try again later.",
+    noPosts: "No posts available.",
+    noMatches: "No posts match the current filters.",
+    postCount: "{count} posts",
+    noVisibleContent: "No content available for the current filters.",
+    viewSource: "View source",
+    loadingMember: "Loading member profile...",
+    memberLoadFailed: "Member profile is temporarily unavailable.",
+    memberProfileFail: "Failed to load member profile.",
+    openOfficialPage: "Official profile",
+    greetingList: "Greeting list",
+    greeting: "Greeting",
+    card: "Card",
+    photo: "Photo",
+  },
+  ja: {
+    filter: "絞り込み",
+    timeline: "タイムライン",
+    tag: "タグ",
+    keyword: "キーワード",
+    keywordPlaceholder: "タイトルまたは本文を検索",
+    all: "すべて",
+    loadingPosts: "記事を読み込み中...",
+    loadError: "データの読み込みに失敗しました。しばらくしてから再試行してください。",
+    noPosts: "記事データがありません。",
+    noMatches: "条件に一致する記事がありません。",
+    postCount: "{count}件の記事",
+    noVisibleContent: "現在の条件で表示できる内容がありません。",
+    viewSource: "原文を見る",
+    loadingMember: "メンバー情報を読み込み中...",
+    memberLoadFailed: "メンバー情報を取得できませんでした。",
+    memberProfileFail: "メンバー情報の読み込みに失敗しました。",
+    openOfficialPage: "公式メンバーページ",
+    greetingList: "グリーティング一覧",
+    greeting: "グリーティング",
+    card: "カード",
+    photo: "写真",
+  },
+  ko: {
+    filter: "필터",
+    timeline: "타임라인",
+    tag: "태그",
+    keyword: "키워드",
+    keywordPlaceholder: "제목 또는 본문 검색",
+    all: "전체",
+    loadingPosts: "게시글을 불러오는 중...",
+    loadError: "데이터를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
+    noPosts: "게시글 데이터가 없습니다.",
+    noMatches: "현재 조건에 맞는 게시글이 없습니다.",
+    postCount: "게시글 {count}개",
+    noVisibleContent: "현재 조건에서 표시할 내용이 없습니다.",
+    viewSource: "원문 보기",
+    loadingMember: "멤버 정보를 불러오는 중...",
+    memberLoadFailed: "멤버 정보를 일시적으로 불러올 수 없습니다.",
+    memberProfileFail: "멤버 정보 로드에 실패했습니다.",
+    openOfficialPage: "멤버 공식 페이지",
+    greetingList: "그리팅 목록",
+    greeting: "그리팅",
+    card: "카드",
+    photo: "사진",
+  },
+};
+
+function normalizeLocale(rawLocale) {
+  if (!rawLocale || typeof rawLocale !== "string") return null;
+
+  const locale = rawLocale.toLowerCase();
+  if (locale.startsWith("zh")) {
+    if (
+      locale.includes("hant") ||
+      locale.includes("-tw") ||
+      locale.includes("-hk") ||
+      locale.includes("-mo")
+    ) {
+      return "zh-Hant";
+    }
+    return "zh-Hans";
+  }
+
+  if (locale.startsWith("ja")) return "ja";
+  if (locale.startsWith("ko")) return "ko";
+  if (locale.startsWith("en")) return "en";
+
+  return null;
+}
+
+function detectLocaleKey() {
+  const candidates = Array.isArray(navigator.languages) && navigator.languages.length
+    ? navigator.languages
+    : [navigator.language || ""];
+
+  for (const candidate of candidates) {
+    const normalized = normalizeLocale(candidate);
+    if (normalized) return normalized;
+  }
+
+  return "zh-Hans";
+}
+
+function htmlLangFromLocale(localeKey) {
+  if (localeKey === "zh-Hant") return "zh-Hant";
+  if (localeKey === "zh-Hans") return "zh-CN";
+  return localeKey;
+}
+
 const state = {
+  localeKey: detectLocaleKey(),
   posts: [],
   filteredPosts: [],
   activeTag: "all",
@@ -13,12 +174,34 @@ const state = {
   memberErrorMessage: "",
 };
 
+function t(key, variables = {}) {
+  const table = I18N[state.localeKey] || I18N.en;
+  const fallback = I18N.en[key] || key;
+  const raw = table[key] || fallback;
+
+  return raw.replace(/\{(\w+)\}/g, (_, name) => String(variables[name] ?? ""));
+}
+
 const postListEl = document.getElementById("post-list");
 const postDetailEl = document.getElementById("post-detail");
 const tagSelectEl = document.getElementById("tag-select");
 const keywordInputEl = document.getElementById("keyword-input");
 const listStatusEl = document.getElementById("list-status");
 const memberPanelEl = document.getElementById("member-panel");
+const filterTitleEl = document.getElementById("filter-title");
+const timelineTitleEl = document.getElementById("timeline-title");
+const tagLabelEl = document.getElementById("tag-label");
+const keywordLabelEl = document.getElementById("keyword-label");
+
+function applyStaticI18n() {
+  document.documentElement.lang = htmlLangFromLocale(state.localeKey);
+
+  if (filterTitleEl) filterTitleEl.textContent = t("filter");
+  if (timelineTitleEl) timelineTitleEl.textContent = t("timeline");
+  if (tagLabelEl) tagLabelEl.textContent = t("tag");
+  if (keywordLabelEl) keywordLabelEl.textContent = t("keyword");
+  if (keywordInputEl) keywordInputEl.placeholder = t("keywordPlaceholder");
+}
 
 function normalizeKeyword(input) {
   return String(input ?? "").trim().toLowerCase();
@@ -97,7 +280,11 @@ function resolveActiveId(filteredPosts, preferredId, hashId) {
 }
 
 function renderTagOptions(posts) {
-  tagSelectEl.innerHTML = '<option value="all">全部</option>';
+  tagSelectEl.innerHTML = "";
+  const allOption = document.createElement("option");
+  allOption.value = "all";
+  allOption.textContent = t("all");
+  tagSelectEl.appendChild(allOption);
 
   const tags = new Set();
   posts.forEach((post) => post.tags.forEach((tag) => tags.add(tag)));
@@ -117,30 +304,30 @@ function renderStatus() {
 
   if (state.loadingState === "loading") {
     listStatusEl.classList.add("info");
-    listStatusEl.textContent = "正在加载文章...";
+    listStatusEl.textContent = t("loadingPosts");
     return;
   }
 
   if (state.loadingState === "error") {
     listStatusEl.classList.add("error");
-    listStatusEl.textContent = state.errorMessage || "数据加载失败，请稍后重试。";
+    listStatusEl.textContent = state.errorMessage || t("loadError");
     return;
   }
 
   if (state.posts.length === 0) {
     listStatusEl.classList.add("info");
-    listStatusEl.textContent = "暂无文章数据。";
+    listStatusEl.textContent = t("noPosts");
     return;
   }
 
   if (state.filteredPosts.length === 0) {
     listStatusEl.classList.add("info");
-    listStatusEl.textContent = "当前筛选条件下没有匹配文章。";
+    listStatusEl.textContent = t("noMatches");
     return;
   }
 
   listStatusEl.classList.add("info");
-  listStatusEl.textContent = `共 ${state.filteredPosts.length} 篇文章`;
+  listStatusEl.textContent = t("postCount", { count: state.filteredPosts.length });
 }
 
 function renderList() {
@@ -223,24 +410,19 @@ function renderPostBody(post) {
 
 function renderDetail() {
   if (state.loadingState === "loading") {
-    postDetailEl.innerHTML = '<p class="empty">正在加载文章...</p>';
+    postDetailEl.innerHTML = `<p class="empty">${t("loadingPosts")}</p>`;
     return;
   }
 
   if (state.loadingState === "error") {
-    postDetailEl.innerHTML = `<p class="empty error">${
-      state.errorMessage || "数据加载失败，请稍后重试。"
-    }</p>`;
+    postDetailEl.innerHTML = `<p class="empty error">${state.errorMessage || t("loadError")}</p>`;
     return;
   }
 
   const post = state.filteredPosts.find((item) => item.id === state.activeId);
 
   if (!post) {
-    const emptyText =
-      state.posts.length === 0
-        ? "暂无文章数据。"
-        : "当前筛选条件下没有可展示内容。";
+    const emptyText = state.posts.length === 0 ? t("noPosts") : t("noVisibleContent");
     postDetailEl.innerHTML = `<p class="empty">${emptyText}</p>`;
     return;
   }
@@ -270,7 +452,7 @@ function renderDetail() {
   sourceLinkEl.href = post.sourceUrl;
   sourceLinkEl.target = "_blank";
   sourceLinkEl.rel = "noreferrer";
-  sourceLinkEl.textContent = "查看原文";
+  sourceLinkEl.textContent = t("viewSource");
   sourceWrapEl.appendChild(sourceLinkEl);
 
   postDetailEl.append(titleEl, dateEl, tagsWrapEl, bodyEl, sourceWrapEl);
@@ -292,14 +474,14 @@ function renderMemberPanel() {
   memberPanelEl.innerHTML = "";
 
   if (state.memberLoadingState === "loading") {
-    memberPanelEl.innerHTML = '<p class="empty">正在加载成员资料...</p>';
+    memberPanelEl.innerHTML = `<p class="empty">${t("loadingMember")}</p>`;
     return;
   }
 
   if (state.memberLoadingState === "error" || !state.member) {
     const errorEl = document.createElement("p");
     errorEl.className = "empty";
-    errorEl.textContent = state.memberErrorMessage || "成员资料加载失败。";
+    errorEl.textContent = state.memberErrorMessage || t("memberProfileFail");
 
     const sourceWrapEl = document.createElement("p");
     sourceWrapEl.className = "member-source-link";
@@ -307,7 +489,7 @@ function renderMemberPanel() {
     sourceLinkEl.href = DEFAULT_MEMBER_SOURCE_URL;
     sourceLinkEl.target = "_blank";
     sourceLinkEl.rel = "noreferrer";
-    sourceLinkEl.textContent = "打开官方成员页";
+    sourceLinkEl.textContent = t("openOfficialPage");
     sourceWrapEl.appendChild(sourceLinkEl);
 
     memberPanelEl.append(errorEl, sourceWrapEl);
@@ -372,7 +554,7 @@ function renderMemberPanel() {
     greetingWrapEl.className = "member-greeting";
 
     const titleEl = document.createElement("h4");
-    titleEl.textContent = "GREETING";
+    titleEl.textContent = t("greeting");
     greetingWrapEl.appendChild(titleEl);
 
     const gridEl = document.createElement("div");
@@ -382,10 +564,10 @@ function renderMemberPanel() {
       const cardFigure = document.createElement("figure");
       const cardImg = document.createElement("img");
       cardImg.src = greetingCardSrc;
-      cardImg.alt = "Greeting Card";
+      cardImg.alt = t("card");
       cardImg.loading = "lazy";
       const cardCaption = document.createElement("figcaption");
-      cardCaption.textContent = "CARD";
+      cardCaption.textContent = t("card");
       cardFigure.append(cardImg, cardCaption);
       gridEl.appendChild(cardFigure);
     }
@@ -394,10 +576,10 @@ function renderMemberPanel() {
       const photoFigure = document.createElement("figure");
       const photoImg = document.createElement("img");
       photoImg.src = greetingPhotoSrc;
-      photoImg.alt = "Greeting Photo";
+      photoImg.alt = t("photo");
       photoImg.loading = "lazy";
       const photoCaption = document.createElement("figcaption");
-      photoCaption.textContent = "PHOTO";
+      photoCaption.textContent = t("photo");
       photoFigure.append(photoImg, photoCaption);
       gridEl.appendChild(photoFigure);
     }
@@ -413,7 +595,7 @@ function renderMemberPanel() {
   profileLink.href = sourceUrl;
   profileLink.target = "_blank";
   profileLink.rel = "noreferrer";
-  profileLink.textContent = "官方成员页";
+  profileLink.textContent = t("openOfficialPage");
   actionsEl.appendChild(profileLink);
 
   if (typeof member.greetingListUrl === "string" && member.greetingListUrl.trim() !== "") {
@@ -421,7 +603,7 @@ function renderMemberPanel() {
     greetingListLink.href = member.greetingListUrl;
     greetingListLink.target = "_blank";
     greetingListLink.rel = "noreferrer";
-    greetingListLink.textContent = "GREETING LIST";
+    greetingListLink.textContent = t("greetingList");
     actionsEl.appendChild(greetingListLink);
   }
 
@@ -467,6 +649,8 @@ async function fetchJson(path) {
 }
 
 async function init() {
+  applyStaticI18n();
+
   state.loadingState = "loading";
   state.errorMessage = "";
   state.memberLoadingState = "loading";
@@ -487,8 +671,11 @@ async function init() {
   } else {
     state.member = null;
     state.memberLoadingState = "error";
-    state.memberErrorMessage = "成员资料暂时不可用。";
-    console.error("[archive] member init failed:", memberResult.status === "rejected" ? memberResult.reason : memberResult.value);
+    state.memberErrorMessage = t("memberLoadFailed");
+    console.error(
+      "[archive] member init failed:",
+      memberResult.status === "rejected" ? memberResult.reason : memberResult.value,
+    );
   }
   renderMemberPanel();
 
@@ -507,7 +694,7 @@ async function init() {
   }
 
   state.loadingState = "error";
-  state.errorMessage = "数据加载失败，请稍后重试。";
+  state.errorMessage = t("loadError");
   state.posts = [];
   state.filteredPosts = [];
   state.activeId = null;
@@ -516,7 +703,10 @@ async function init() {
   renderStatus();
   renderDetail();
 
-  console.error("[archive] posts init failed:", postsResult.status === "rejected" ? postsResult.reason : postsResult.value);
+  console.error(
+    "[archive] posts init failed:",
+    postsResult.status === "rejected" ? postsResult.reason : postsResult.value,
+  );
 }
 
 tagSelectEl.addEventListener("change", (event) => {

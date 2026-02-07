@@ -7,66 +7,63 @@ nagiblog/
 ├── index.html
 ├── styles.css
 ├── app.js
+├── portrait.jpeg
+├── portrait.png
+├── scripts/
+│   └── fetch_nagisa_blog.py
 ├── data/
-│   └── posts.json
+│   ├── posts.json
+│   ├── member.json
+│   ├── images/
+│   └── member/
+├── .github/
+│   └── workflows/
+│       ├── pages.yml
+│       └── sync-archive.yml
 └── .spec-workflow/
     ├── README.zh-CN.md
     ├── steering/
-    │   ├── product.md
-    │   ├── tech.md
-    │   └── structure.md
     ├── templates/
-    │   ├── requirements-template.md
-    │   ├── design-template.md
-    │   ├── tasks-template.md
-    │   ├── product-template.md
-    │   ├── tech-template.md
-    │   └── structure-template.md
     └── specs/
-        └── archive-search-experience/
-            ├── requirements.md
-            ├── design.md
-            └── tasks.md
 ```
 
+## Layering (Runtime)
+1. **Data Fetch Layer**（`app.js`）
+   - 读取 `data/posts.json` / `data/member.json`
+2. **State & Filter Layer**（`app.js`）
+   - 标签、关键词、activeId、hash 同步
+3. **Presentation Layer**（`app.js` + `styles.css`）
+   - 时间线、正文、成员侧栏、移动端抽屉
+4. **Sync Layer**（`scripts/` + `workflows/`）
+   - 增量抓取、图片本地化、Pages 发布
+
 ## Naming Conventions
+- 规格目录：`kebab-case`（例如 `archive-mobile-sync-governance`）
+- JS：`camelCase`
+- 常量：`UPPER_SNAKE_CASE`
+- workflow：语义化命名（`pages.yml`、`sync-archive.yml`）
 
-### Files
-- 功能规格名使用 `kebab-case`，例如：`archive-search-experience`
-- 规格文档固定命名：`requirements.md`、`design.md`、`tasks.md`
-- 页面资源文件保持语义化命名（如 `app.js`, `styles.css`）
+## File Responsibility
+- `index.html`：静态骨架和关键挂载点
+- `styles.css`：布局、响应式、视觉样式
+- `app.js`：状态、过滤、渲染、事件与 hash 路由
+- `scripts/fetch_nagisa_blog.py`：抓取与本地化
+- `.github/workflows/pages.yml`：发布时同步并部署
+- `.github/workflows/sync-archive.yml`：手动同步并提交
 
-### Code
-- **Functions/Methods**：`camelCase`
-- **Constants**：`UPPER_SNAKE_CASE`
-- **Variables**：`camelCase`
-
-## Import Patterns
-- 当前为原生脚本，暂无模块化 import。
-- 后续若拆分文件，优先按“数据/过滤/渲染/路由”分层。
-
-## Code Structure Patterns
-- 推荐顺序：状态定义 -> 纯函数 -> 渲染函数 -> 事件绑定 -> `init()`。
-- 每个函数尽量单一职责，避免超长函数。
-
-## Code Organization Principles
-1. **单一职责**：数据处理与 UI 渲染分离。
-2. **可测试**：过滤、排序等逻辑优先写成纯函数。
-3. **一致性**：DOM 命名和 CSS 命名保持一致。
-4. **渐进式演进**：优先小步提交，避免一次性大改。
-
-## Module Boundaries
-- **Data Layer**：读取/转换文章数据
-- **Filter Layer**：标签与关键词过滤
-- **Presentation Layer**：列表与详情渲染
-- **Routing Layer**：hash 解析与同步
-
-## Code Size Guidelines
-- **File size**：建议单文件不超过 300 行（超过则拆分）
-- **Function size**：建议单函数不超过 40 行
-- **Nesting depth**：尽量不超过 3 层
+## Operational Rules
+1. 任何涉及同步策略的改动，必须同时更新：
+   - `steering/tech.md`
+   - 对应 spec 的 `requirements/design/tasks`
+2. 任何移动端交互改动，必须在 spec 中记录：
+   - 触发入口
+   - 关闭行为
+   - 遮罩层与层级规则
+3. 发布链路改动后必须验证：
+   - `https://konnagi0707.github.io/nagiblog/data/posts.json` 返回 200
+   - `https://konnagi0707.github.io/nagiblog/data/member.json` 返回 200
 
 ## Documentation Standards
-- 每个规格都要有可执行的任务列表。
-- 任务必须标注 `_Requirements`，确保可追溯。
-- 需求变化时，先更新规格，再更新实现。
+- 已完成任务使用 `[x]` 标记，并附 Requirements 编号。
+- 每个规格必须体现“为何这么做（trade-off）”。
+- 需求变更优先更新规格，再更新实现。

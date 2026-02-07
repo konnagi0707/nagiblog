@@ -1,84 +1,59 @@
 # Technology Stack
 
 ## Project Type
-静态前端单页应用（HTML + CSS + JavaScript），以本地 JSON 作为数据源。
+静态前端站点（HTML/CSS/JavaScript）+ Python 抓取脚本 + GitHub Actions 自动化。
 
 ## Core Technologies
 
-### Primary Language(s)
-- **Language**: JavaScript (ES6+), HTML5, CSS3
-- **Runtime/Compiler**: 浏览器原生运行，无构建步骤
-- **Language-specific tools**: `python3 -m http.server` 用于本地预览
+### Frontend
+- HTML5 / CSS3 / JavaScript (ES6+)
+- 原生 DOM + Fetch API
+- 无构建步骤、无前端框架
 
-### Key Dependencies/Libraries
-- **原生 DOM API**：页面渲染与交互
-- **Fetch API**：读取 `data/posts.json`
+### Data Sync
+- Python 3.13
+- 脚本：`scripts/fetch_nagisa_blog.py`
+- 能力：
+  - 增量抓取博客列表与详情
+  - 下载正文图片到 `data/images/<post_id>/`
+  - 抓取成员资料与成员图到 `data/member/`
+  - 输出 `data/posts.json` 和 `data/member.json`
 
-### Application Architecture
-- 单页面、状态驱动渲染：
-  - 数据加载
-  - 过滤计算
-  - 列表渲染
-  - 详情渲染
-  - hash 路由同步
+### Hosting / Automation
+- GitHub Pages
+- GitHub Actions:
+  - `pages.yml`：push / 手动 / 每日定时触发，执行抓取 + 发布
+  - `sync-archive.yml`：手动同步并可提交数据到仓库（维护用途）
+- Actions 缓存：`data/posts.json`、`data/member.json`、`data/images`、`data/member`
 
-### Data Storage
-- **Primary storage**：`data/posts.json`
-- **Caching**：当前不做持久缓存，仅内存态
-- **Data formats**：JSON
+## Runtime Data Model
+- `data/posts.json`：文章数组（含 `contentBlocks`）
+- `data/member.json`：成员资料与图片映射
+- `data/images/`：文章图片本地化目录
+- `data/member/`：成员图片本地化目录（含 `グリーティングカード` / `フォト`）
 
-### External Integrations
-- **APIs**：当前无外部 API
-- **Protocols**：HTTP（静态文件服务）
-- **Authentication**：无
+## Technical Constraints
+1. 不引入重型前端框架，保持静态站点可维护性。
+2. 抓取频率遵循低频策略（当前：每日 1 次）。
+3. 发布产物必须包含 `data/`，避免线上 404。
+4. 同步失败不能导致页面 JS 崩溃，需显示可理解错误文案。
 
-## Development Environment
+## Reliability Notes
+- 若缓存缺失，首次抓取耗时会明显上升。
+- 若官方页面结构变更，抓取脚本可能退化，需要更新解析逻辑。
+- 若 `data/*.json` 不在发布产物中，前端会显示“数据加载失败”。
 
-### Build & Development Tools
-- **Build System**：无
-- **Package Management**：无
-- **Development workflow**：修改文件后刷新页面验证
+## Security / Compliance
+- 外链统一 `target="_blank" + rel="noreferrer"`
+- 前端不直接注入不可信 HTML，文本与图片区块分离渲染
+- 抓取频率和延迟参数（`--sleep` / `--image-sleep`）用于降低请求压力
 
-### Code Quality Tools
-- **Static Analysis**：当前未启用（后续可加 ESLint）
-- **Formatting**：当前未启用（后续可加 Prettier）
-- **Testing Framework**：当前以手动回归为主（后续可引入 Vitest/Playwright）
-- **Documentation**：Markdown 文档
+## Local Development
+- 预览：`python3 -m http.server 8000`
+- 同步（增量）：
+  - `python3 scripts/fetch_nagisa_blog.py --output data/posts.json --member-output data/member.json`
 
-### Version Control & Collaboration
-- **VCS**：Git
-- **Branching Strategy**：功能分支 + PR（建议）
-- **Code Review Process**：以规格驱动审查为主
-
-## Deployment & Distribution
-- **Target Platform(s)**：现代浏览器
-- **Distribution Method**：静态托管（可部署到 GitHub Pages 或其他静态托管）
-- **Installation Requirements**：浏览器 + 本地静态服务
-- **Update Mechanism**：代码更新后重新部署
-
-## Technical Requirements & Constraints
-
-### Performance Requirements
-- 中小规模文章列表在普通笔记本浏览器中保持流畅滚动
-- 标签切换和搜索响应应接近即时
-
-### Compatibility Requirements
-- **Platform Support**：Chrome / Safari / Edge 最新稳定版
-- **Dependency Versions**：无第三方依赖
-
-### Security & Compliance
-- 外链统一 `target="_blank"` + `rel="noreferrer"`
-- 避免直接注入不可信 HTML
-
-### Scalability & Reliability
-- 当前优先支持小到中等规模文章数据
-- 后续若数据量增长，考虑分页或虚拟列表
-
-## Technical Decisions & Rationale
-1. **先保持原生技术栈**：降低复杂度，快速迭代 UI/交互。
-2. **JSON 作为初始数据源**：便于快速验证归档体验。
-3. **规格先行再改代码**：减少返工，提升可追溯性。
-
-## Known Limitations
-- 目前无自动化测试，回归成本较高。
-- 数据更新流程仍偏手工，后续需自动化。
+## Key Decisions (Current)
+1. **发布时抓取 + 缓存恢复**：保证线上 `data/` 可用，避免 404。
+2. **定时降频到每日**：避免高频抓取。
+3. **手动同步独立工作流**：在需要落库时手动执行，不默认高频提交。

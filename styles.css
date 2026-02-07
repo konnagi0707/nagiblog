@@ -150,15 +150,26 @@ body {
 
 .mobile-menu-btn {
   display: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  border: 1px solid #d4e4ea;
-  background: #fff;
-  color: #244654;
-  font-size: 22px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 0;
+  background: transparent !important;
+  color: #1f3f4c;
+  font-size: 28px;
   line-height: 1;
   padding: 0;
+  box-shadow: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.mobile-menu-btn:active {
+  opacity: 0.65;
+}
+
+.mobile-menu-btn:hover {
+  background: transparent;
 }
 
 .drawer-backdrop {
@@ -423,30 +434,18 @@ body {
   border-bottom: 1px solid #e4eef2;
 }
 
-.member-name-lines {
-  display: grid;
-  gap: 4px;
-}
-
-.member-name-row {
-  margin: 0;
-  display: inline-flex;
-  align-items: flex-end;
-  gap: 8px;
-}
-
 .member-name {
   margin: 0;
-  font-size: clamp(28px, 1.55vw, 34px);
-  line-height: 1;
+  font-size: clamp(28px, 1.7vw, 34px);
+  line-height: 1.08;
   letter-spacing: 0.01em;
   color: #21424f;
 }
 
 .member-kana {
-  margin: 0;
+  margin: 6px 0 0;
   color: var(--muted);
-  font-size: clamp(14px, 0.9vw, 17px);
+  font-size: clamp(14px, 0.95vw, 17px);
   line-height: 1.2;
 }
 
@@ -488,13 +487,6 @@ body {
 
 .member-greeting {
   margin-top: 16px;
-}
-
-.member-greeting h4 {
-  margin: 0 0 10px;
-  letter-spacing: 0.16em;
-  font-size: 20px;
-  color: #2b4a56;
 }
 
 .member-greeting-grid {

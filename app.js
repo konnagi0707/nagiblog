@@ -24,7 +24,7 @@ const I18N = {
     openOfficialPage: "成员官方页",
     greetingList: "问候列表",
     greeting: "问候",
-    card: "卡片",
+    card: "问候卡片",
     photo: "照片",
     member: "成员",
     filterTimeline: "筛选与时间线",
@@ -51,7 +51,7 @@ const I18N = {
     openOfficialPage: "成員官方頁",
     greetingList: "問候列表",
     greeting: "問候",
-    card: "卡片",
+    card: "問候卡片",
     photo: "照片",
     member: "成員",
     filterTimeline: "篩選與時間線",
@@ -78,7 +78,7 @@ const I18N = {
     openOfficialPage: "Official profile",
     greetingList: "Greeting list",
     greeting: "Greeting",
-    card: "Card",
+    card: "Greeting Card",
     photo: "Photo",
     member: "Member",
     filterTimeline: "Filters & Timeline",
@@ -105,8 +105,8 @@ const I18N = {
     openOfficialPage: "公式メンバーページ",
     greetingList: "グリーティング一覧",
     greeting: "グリーティング",
-    card: "カード",
-    photo: "写真",
+    card: "グリーティングカード",
+    photo: "フォト",
     member: "メンバー",
     filterTimeline: "絞り込みとタイムライン",
     closePanel: "閉じる",
@@ -132,8 +132,8 @@ const I18N = {
     openOfficialPage: "멤버 공식 페이지",
     greetingList: "그리팅 목록",
     greeting: "그리팅",
-    card: "카드",
-    photo: "사진",
+    card: "그리팅 카드",
+    photo: "포토",
     member: "멤버",
     filterTimeline: "필터 및 타임라인",
     closePanel: "닫기",
@@ -246,7 +246,6 @@ const keywordLabelEl = document.getElementById("keyword-label");
 const languageLabelEl = document.getElementById("language-label");
 const languageSwitchEl = document.getElementById("language-switch");
 const mobileFilterButtonEl = document.getElementById("open-filter-drawer");
-const mobileMemberButtonEl = document.getElementById("open-member-drawer");
 const mobileTopMemberButtonEl = document.getElementById("open-member-drawer-top");
 const drawerBackdropEl = document.getElementById("drawer-backdrop");
 const drawerCloseEls = document.querySelectorAll("[data-drawer-close]");
@@ -261,7 +260,6 @@ function applyStaticI18n() {
   if (keywordInputEl) keywordInputEl.placeholder = t("keywordPlaceholder");
   if (languageLabelEl) languageLabelEl.textContent = t("language");
   if (mobileFilterButtonEl) mobileFilterButtonEl.textContent = t("filter");
-  if (mobileMemberButtonEl) mobileMemberButtonEl.textContent = t("member");
   if (mobileTopMemberButtonEl) mobileTopMemberButtonEl.setAttribute("aria-label", t("member"));
   if (drawerBackdropEl) drawerBackdropEl.setAttribute("aria-label", t("closePanel"));
 
@@ -288,10 +286,6 @@ function setDrawerButtonState() {
 
   if (mobileFilterButtonEl) {
     mobileFilterButtonEl.setAttribute("aria-expanded", filterOpen ? "true" : "false");
-  }
-
-  if (mobileMemberButtonEl) {
-    mobileMemberButtonEl.setAttribute("aria-expanded", memberOpen ? "true" : "false");
   }
 
   if (mobileTopMemberButtonEl) {
@@ -325,10 +319,6 @@ function openMemberDrawer() {
 function initializeMobileDrawers() {
   if (mobileFilterButtonEl) {
     mobileFilterButtonEl.addEventListener("click", openFilterDrawer);
-  }
-
-  if (mobileMemberButtonEl) {
-    mobileMemberButtonEl.addEventListener("click", openMemberDrawer);
   }
 
   if (mobileTopMemberButtonEl) {
@@ -633,38 +623,6 @@ function normalizeMemberAttributes(attributes) {
     .filter((item) => item.label !== "" && item.value !== "");
 }
 
-function getMemberNameRows(name, kana) {
-  const normalize = (value) => String(value ?? "").trim().replace(/\s+/g, " ");
-  const split = (value) => normalize(value).split(" ").filter(Boolean);
-
-  const nameParts = split(name);
-  const kanaParts = split(kana);
-
-  if (nameParts.length >= 2 && kanaParts.length >= 2) {
-    return [
-      { name: nameParts[0], kana: kanaParts[0] },
-      { name: nameParts[1], kana: kanaParts[1] },
-    ];
-  }
-
-  const cleanName = normalize(name);
-  if (cleanName.includes("小島") && cleanName.includes("凪紗")) {
-    return [
-      { name: "小島", kana: "こじま" },
-      { name: "凪紗", kana: "なぎさ" },
-    ];
-  }
-
-  if (cleanName !== "") {
-    return [{ name: cleanName, kana: normalize(kana) }];
-  }
-
-  return [
-    { name: "小島", kana: "こじま" },
-    { name: "凪紗", kana: "なぎさ" },
-  ];
-}
-
 function renderMemberPanel() {
   const panelBodyEl = memberPanelBodyEl || memberPanelEl;
   if (!panelBodyEl) return;
@@ -705,27 +663,15 @@ function renderMemberPanel() {
   const headerEl = document.createElement("header");
   headerEl.className = "member-header";
 
-  const nameRows = getMemberNameRows(member.name, member.kana);
-  const nameLinesEl = document.createElement("div");
-  nameLinesEl.className = "member-name-lines";
+  const nameEl = document.createElement("h3");
+  nameEl.className = "member-name";
+  nameEl.textContent = member.name || "小島 凪紗";
 
-  nameRows.forEach((row) => {
-    const rowEl = document.createElement("p");
-    rowEl.className = "member-name-row";
+  const kanaEl = document.createElement("p");
+  kanaEl.className = "member-kana";
+  kanaEl.textContent = member.kana || "こじま なぎさ";
 
-    const namePartEl = document.createElement("span");
-    namePartEl.className = "member-name";
-    namePartEl.textContent = row.name;
-
-    const kanaPartEl = document.createElement("span");
-    kanaPartEl.className = "member-kana";
-    kanaPartEl.textContent = row.kana;
-
-    rowEl.append(namePartEl, kanaPartEl);
-    nameLinesEl.appendChild(rowEl);
-  });
-
-  headerEl.appendChild(nameLinesEl);
+  headerEl.append(nameEl, kanaEl);
   panelBodyEl.appendChild(headerEl);
 
   const profileSrc = images.profile?.src;
@@ -762,10 +708,6 @@ function renderMemberPanel() {
   ) {
     const greetingWrapEl = document.createElement("section");
     greetingWrapEl.className = "member-greeting";
-
-    const titleEl = document.createElement("h4");
-    titleEl.textContent = t("greeting");
-    greetingWrapEl.appendChild(titleEl);
 
     const gridEl = document.createElement("div");
     gridEl.className = "member-greeting-grid";

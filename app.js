@@ -245,10 +245,11 @@ const tagLabelEl = document.getElementById("tag-label");
 const keywordLabelEl = document.getElementById("keyword-label");
 const languageLabelEl = document.getElementById("language-label");
 const languageSwitchEl = document.getElementById("language-switch");
-const mobileFilterButtonEl = document.getElementById("open-filter-drawer");
+const mobileFilterButtonEl = document.getElementById("open-filter-drawer-top");
 const mobileTopMemberButtonEl = document.getElementById("open-member-drawer-top");
 const drawerBackdropEl = document.getElementById("drawer-backdrop");
 const drawerCloseEls = document.querySelectorAll("[data-drawer-close]");
+const topbarEl = document.querySelector(".topbar");
 
 function applyStaticI18n() {
   document.documentElement.lang = htmlLangFromLocale(state.localeKey);
@@ -303,6 +304,7 @@ function closeDrawers() {
 
 function openFilterDrawer() {
   const isOpen = document.body.classList.contains("drawer-filter-open");
+  document.body.classList.remove("topbar-hidden");
   closeDrawers();
   if (!isOpen) {
     document.body.classList.add("drawer-filter-open");
@@ -312,6 +314,7 @@ function openFilterDrawer() {
 
 function openMemberDrawer() {
   const isOpen = document.body.classList.contains("drawer-member-open");
+  document.body.classList.remove("topbar-hidden");
   closeDrawers();
   if (!isOpen) {
     document.body.classList.add("drawer-member-open");
@@ -349,6 +352,40 @@ function initializeMobileDrawers() {
   });
 
   setDrawerButtonState();
+}
+
+function initializeMobileTopbarAutoHide() {
+  if (!topbarEl) return;
+
+  let lastY = window.scrollY;
+
+  window.addEventListener("scroll", () => {
+    if (window.innerWidth > 1100) {
+      document.body.classList.remove("topbar-hidden");
+      lastY = window.scrollY;
+      return;
+    }
+
+    const currentY = window.scrollY;
+    const delta = currentY - lastY;
+    const drawerOpen =
+      document.body.classList.contains("drawer-filter-open") ||
+      document.body.classList.contains("drawer-member-open");
+
+    if (drawerOpen) {
+      document.body.classList.remove("topbar-hidden");
+      lastY = currentY;
+      return;
+    }
+
+    if (delta > 6 && currentY > 90) {
+      document.body.classList.add("topbar-hidden");
+    } else if (delta < -6) {
+      document.body.classList.remove("topbar-hidden");
+    }
+
+    lastY = currentY;
+  }, { passive: true });
 }
 
 function normalizeKeyword(input) {
@@ -844,6 +881,7 @@ async function init() {
   applyStaticI18n();
   initializeLanguageSwitcher();
   initializeMobileDrawers();
+  initializeMobileTopbarAutoHide();
   renderLanguageSwitcher();
   closeDrawers();
 

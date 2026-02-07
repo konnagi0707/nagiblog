@@ -7,7 +7,7 @@
     <link rel="icon" href="portrait.jpeg?v=4" type="image/jpeg" />
     <link rel="shortcut icon" href="portrait.jpeg?v=4" type="image/jpeg" />
     <link rel="apple-touch-icon" href="portrait.jpeg?v=4" />
-    <link rel="stylesheet" href="styles.css?v=14" />
+    <link rel="stylesheet" href="styles.css?v=15" />
   </head>
   <body>
     <header class="topbar">
@@ -19,17 +19,22 @@
 
         <div class="topbar-controls">
           <button
+            id="open-filter-drawer-top"
+            class="mobile-search-btn"
+            type="button"
+            aria-label="Search and filter"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="11" cy="11" r="6.5"></circle>
+              <path d="M16 16 L21 21"></path>
+            </svg>
+          </button>
+          <button
             id="open-member-drawer-top"
             class="mobile-menu-btn"
             type="button"
             aria-label="Open member panel"
           >☰</button>
-          <button
-            id="open-filter-drawer-top"
-            class="mobile-search-btn"
-            type="button"
-            aria-label="Search and filter"
-          >🔍</button>
         </div>
       </div>
     </header>
@@ -75,6 +80,6 @@
       </section>
     </main>
 
-    <script src="app.js?v=14" defer></script>
+    <script src="app.js?v=15" defer></script>
   </body>
 </html>

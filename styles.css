@@ -11,6 +11,7 @@
   --danger: #b42318;
   --soft-blue: #e9f2f5;
   --soft-orange: #fff4e1;
+  --mobile-topbar-h: 64px;
 }
 
 * {
@@ -164,12 +165,22 @@ body {
   border-radius: 0;
   background: transparent !important;
   color: #1f3f4c;
-  font-size: 22px;
-  line-height: 1;
   padding: 0;
   box-shadow: none;
   appearance: none;
   -webkit-appearance: none;
+}
+
+.mobile-search-btn svg {
+  width: 21px;
+  height: 21px;
+  stroke: #1f3f4c;
+  stroke-width: 2.2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: block;
+  margin: 0 auto;
 }
 
 .mobile-search-btn:active {
@@ -625,7 +636,7 @@ body {
 
   .topbar-controls {
     width: auto;
-    gap: 6px;
+    gap: 4px;
   }
 
   .mobile-menu-btn,
@@ -638,7 +649,7 @@ body {
 
   .layout {
     display: block;
-    padding: 80px 12px 20px;
+    padding: calc(var(--mobile-topbar-h) + 10px) 12px 20px;
   }
 
   .content-shell {
@@ -653,10 +664,10 @@ body {
   .sidebar,
   .member-panel {
     position: fixed;
-    top: 0;
+    top: var(--mobile-topbar-h);
     bottom: 0;
     width: min(86vw, 360px);
-    height: 100dvh;
+    height: calc(100dvh - var(--mobile-topbar-h));
     max-height: none;
     overflow-y: auto;
     overflow-x: hidden;
@@ -682,6 +693,12 @@ body {
     align-self: auto;
     padding: 14px;
     border-top-width: 0;
+  }
+
+  body.topbar-hidden .sidebar,
+  body.topbar-hidden .member-panel {
+    top: 0;
+    height: 100dvh;
   }
 
   body.drawer-filter-open .sidebar {

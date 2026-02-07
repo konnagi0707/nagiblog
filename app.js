@@ -259,7 +259,10 @@ function applyStaticI18n() {
   if (keywordLabelEl) keywordLabelEl.textContent = t("keyword");
   if (keywordInputEl) keywordInputEl.placeholder = t("keywordPlaceholder");
   if (languageLabelEl) languageLabelEl.textContent = t("language");
-  if (mobileFilterButtonEl) mobileFilterButtonEl.textContent = t("filter");
+  if (mobileFilterButtonEl) {
+    mobileFilterButtonEl.setAttribute("aria-label", t("filter"));
+    mobileFilterButtonEl.setAttribute("title", t("filter"));
+  }
   if (mobileTopMemberButtonEl) mobileTopMemberButtonEl.setAttribute("aria-label", t("member"));
   if (drawerBackdropEl) drawerBackdropEl.setAttribute("aria-label", t("closePanel"));
 

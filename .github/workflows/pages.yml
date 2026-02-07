@@ -25,32 +25,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-
-      - name: Restore archive cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            data/posts.json
-            data/member.json
-            data/images
-            data/member
-          key: archive-${{ runner.os }}-${{ github.ref_name }}-${{ github.run_id }}
-          restore-keys: |
-            archive-${{ runner.os }}-${{ github.ref_name }}-
-            archive-${{ runner.os }}-
-
-      - name: Sync archive data
-        run: |
-          python3 scripts/fetch_nagisa_blog.py \
-            --output data/posts.json \
-            --member-output data/member.json \
-            --sleep 0.12 \
-            --image-sleep 0.03
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 

@@ -621,22 +621,36 @@ body {
   .mobile-drawer-actions {
     position: fixed;
     right: 0;
-    top: 50%;
-    bottom: auto;
-    transform: translateY(-50%);
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    top: auto;
+    transform: none;
     z-index: 91;
     display: inline-flex !important;
     gap: 0;
   }
 
   .mobile-action-btn {
-    height: 40px;
-    font-size: 13px;
+    width: 54px;
+    min-width: 54px;
+    height: 54px;
+    border: 1px solid #dde6eb;
     border-right: 0;
     border-radius: 12px 0 0 12px;
-    padding: 0 12px;
-    box-shadow: -2px 10px 18px -14px rgba(31, 50, 61, 0.7);
-    background: rgba(255, 255, 255, 0.95);
+    padding: 0;
+    font-size: 0;
+    line-height: 1;
+    box-shadow: -2px 12px 20px -14px rgba(31, 50, 61, 0.7);
+    background: rgba(255, 255, 255, 0.97);
+    color: #2c4a57;
+  }
+
+  .mobile-action-btn::before {
+    content: "☰";
+    display: block;
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 54px;
+    text-align: center;
   }
 
   .layout {
@@ -735,9 +749,8 @@ body {
 
 @media (max-width: 640px) {
   .mobile-drawer-actions {
-    top: auto;
-    bottom: calc(76px + env(safe-area-inset-bottom));
-    transform: none;
+    right: 0;
+    bottom: calc(72px + env(safe-area-inset-bottom));
   }
 
   .topbar-avatar {

@@ -245,11 +245,12 @@ const tagLabelEl = document.getElementById("tag-label");
 const keywordLabelEl = document.getElementById("keyword-label");
 const languageLabelEl = document.getElementById("language-label");
 const languageSwitchEl = document.getElementById("language-switch");
-const mobileFilterButtonEl = document.getElementById("open-filter-drawer-top");
+const mobileFilterButtonEl = document.getElementById("open-filter-drawer-brand");
 const mobileTopMemberButtonEl = document.getElementById("open-member-drawer-top");
 const drawerBackdropEl = document.getElementById("drawer-backdrop");
 const drawerCloseEls = document.querySelectorAll("[data-drawer-close]");
 const topbarEl = document.querySelector(".topbar");
+const topbarBrandEl = document.getElementById("open-filter-drawer-brand");
 
 function applyStaticI18n() {
   document.documentElement.lang = htmlLangFromLocale(state.localeKey);
@@ -263,6 +264,10 @@ function applyStaticI18n() {
   if (mobileFilterButtonEl) {
     mobileFilterButtonEl.setAttribute("aria-label", t("filter"));
     mobileFilterButtonEl.setAttribute("title", t("filter"));
+  }
+  if (topbarBrandEl) {
+    topbarBrandEl.setAttribute("aria-label", t("filter"));
+    topbarBrandEl.setAttribute("title", t("filter"));
   }
   if (mobileTopMemberButtonEl) mobileTopMemberButtonEl.setAttribute("aria-label", t("member"));
   if (drawerBackdropEl) drawerBackdropEl.setAttribute("aria-label", t("closePanel"));
@@ -324,7 +329,19 @@ function openMemberDrawer() {
 
 function initializeMobileDrawers() {
   if (mobileFilterButtonEl) {
-    mobileFilterButtonEl.addEventListener("click", openFilterDrawer);
+    mobileFilterButtonEl.addEventListener("click", () => {
+      if (window.innerWidth <= 1100) {
+        openFilterDrawer();
+      }
+    });
+
+    mobileFilterButtonEl.addEventListener("keydown", (event) => {
+      if (window.innerWidth > 1100) return;
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openFilterDrawer();
+      }
+    });
   }
 
   if (mobileTopMemberButtonEl) {

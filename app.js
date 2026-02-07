@@ -247,8 +247,7 @@ const languageLabelEl = document.getElementById("language-label");
 const languageSwitchEl = document.getElementById("language-switch");
 const mobileFilterButtonEl = document.getElementById("open-filter-drawer");
 const mobileMemberButtonEl = document.getElementById("open-member-drawer");
-const filterDrawerTitleEl = document.getElementById("filter-drawer-title");
-const memberDrawerTitleEl = document.getElementById("member-drawer-title");
+const mobileTopMemberButtonEl = document.getElementById("open-member-drawer-top");
 const drawerBackdropEl = document.getElementById("drawer-backdrop");
 const drawerCloseEls = document.querySelectorAll("[data-drawer-close]");
 
@@ -263,8 +262,7 @@ function applyStaticI18n() {
   if (languageLabelEl) languageLabelEl.textContent = t("language");
   if (mobileFilterButtonEl) mobileFilterButtonEl.textContent = t("filter");
   if (mobileMemberButtonEl) mobileMemberButtonEl.textContent = t("member");
-  if (filterDrawerTitleEl) filterDrawerTitleEl.textContent = t("filterTimeline");
-  if (memberDrawerTitleEl) memberDrawerTitleEl.textContent = t("member");
+  if (mobileTopMemberButtonEl) mobileTopMemberButtonEl.setAttribute("aria-label", t("member"));
   if (drawerBackdropEl) drawerBackdropEl.setAttribute("aria-label", t("closePanel"));
 
   drawerCloseEls.forEach((button) => {
@@ -294,6 +292,10 @@ function setDrawerButtonState() {
 
   if (mobileMemberButtonEl) {
     mobileMemberButtonEl.setAttribute("aria-expanded", memberOpen ? "true" : "false");
+  }
+
+  if (mobileTopMemberButtonEl) {
+    mobileTopMemberButtonEl.setAttribute("aria-expanded", memberOpen ? "true" : "false");
   }
 }
 
@@ -329,6 +331,10 @@ function initializeMobileDrawers() {
     mobileMemberButtonEl.addEventListener("click", openMemberDrawer);
   }
 
+  if (mobileTopMemberButtonEl) {
+    mobileTopMemberButtonEl.addEventListener("click", openMemberDrawer);
+  }
+
   if (drawerBackdropEl) {
     drawerBackdropEl.addEventListener("click", closeDrawers);
   }
@@ -344,7 +350,7 @@ function initializeMobileDrawers() {
   });
 
   window.addEventListener("resize", () => {
-    if (window.innerWidth > 960) {
+    if (window.innerWidth > 1100) {
       closeDrawers();
     }
   });
@@ -627,6 +633,38 @@ function normalizeMemberAttributes(attributes) {
     .filter((item) => item.label !== "" && item.value !== "");
 }
 
+function getMemberNameRows(name, kana) {
+  const normalize = (value) => String(value ?? "").trim().replace(/\s+/g, " ");
+  const split = (value) => normalize(value).split(" ").filter(Boolean);
+
+  const nameParts = split(name);
+  const kanaParts = split(kana);
+
+  if (nameParts.length >= 2 && kanaParts.length >= 2) {
+    return [
+      { name: nameParts[0], kana: kanaParts[0] },
+      { name: nameParts[1], kana: kanaParts[1] },
+    ];
+  }
+
+  const cleanName = normalize(name);
+  if (cleanName.includes("小島") && cleanName.includes("凪紗")) {
+    return [
+      { name: "小島", kana: "こじま" },
+      { name: "凪紗", kana: "なぎさ" },
+    ];
+  }
+
+  if (cleanName !== "") {
+    return [{ name: cleanName, kana: normalize(kana) }];
+  }
+
+  return [
+    { name: "小島", kana: "こじま" },
+    { name: "凪紗", kana: "なぎさ" },
+  ];
+}
+
 function renderMemberPanel() {
   const panelBodyEl = memberPanelBodyEl || memberPanelEl;
   if (!panelBodyEl) return;
@@ -667,15 +705,27 @@ function renderMemberPanel() {
   const headerEl = document.createElement("header");
   headerEl.className = "member-header";
 
-  const nameEl = document.createElement("h3");
-  nameEl.className = "member-name";
-  nameEl.textContent = member.name || "小島 凪紗";
+  const nameRows = getMemberNameRows(member.name, member.kana);
+  const nameLinesEl = document.createElement("div");
+  nameLinesEl.className = "member-name-lines";
 
-  const kanaEl = document.createElement("p");
-  kanaEl.className = "member-kana";
-  kanaEl.textContent = member.kana || "";
+  nameRows.forEach((row) => {
+    const rowEl = document.createElement("p");
+    rowEl.className = "member-name-row";
 
-  headerEl.append(nameEl, kanaEl);
+    const namePartEl = document.createElement("span");
+    namePartEl.className = "member-name";
+    namePartEl.textContent = row.name;
+
+    const kanaPartEl = document.createElement("span");
+    kanaPartEl.className = "member-kana";
+    kanaPartEl.textContent = row.kana;
+
+    rowEl.append(namePartEl, kanaPartEl);
+    nameLinesEl.appendChild(rowEl);
+  });
+
+  headerEl.appendChild(nameLinesEl);
   panelBodyEl.appendChild(headerEl);
 
   const profileSrc = images.profile?.src;

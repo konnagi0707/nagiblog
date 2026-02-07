@@ -15,7 +15,7 @@ const I18N = {
     loadError: "数据加载失败，请稍后重试。",
     noPosts: "暂无文章数据。",
     noMatches: "当前筛选条件下没有匹配文章。",
-    postCount: "共 {count} 篇文章",
+    postCount: "共 {count} 篇ブログ",
     noVisibleContent: "当前筛选条件下没有可展示内容。",
     viewSource: "查看原文",
     loadingMember: "正在加载成员资料...",
@@ -24,8 +24,8 @@ const I18N = {
     openOfficialPage: "成员官方页",
     greetingList: "问候列表",
     greeting: "问候",
-    card: "问候卡片",
-    photo: "照片",
+    card: "グリーティングカード",
+    photo: "フォト",
     member: "成员",
     filterTimeline: "筛选与时间线",
     closePanel: "关闭",
@@ -42,7 +42,7 @@ const I18N = {
     loadError: "資料載入失敗，請稍後重試。",
     noPosts: "暫無文章資料。",
     noMatches: "目前篩選條件下沒有匹配文章。",
-    postCount: "共 {count} 篇文章",
+    postCount: "共 {count} 篇ブログ",
     noVisibleContent: "目前篩選條件下沒有可展示內容。",
     viewSource: "檢視原文",
     loadingMember: "正在載入成員資料...",
@@ -51,8 +51,8 @@ const I18N = {
     openOfficialPage: "成員官方頁",
     greetingList: "問候列表",
     greeting: "問候",
-    card: "問候卡片",
-    photo: "照片",
+    card: "グリーティングカード",
+    photo: "フォト",
     member: "成員",
     filterTimeline: "篩選與時間線",
     closePanel: "關閉",
@@ -78,8 +78,8 @@ const I18N = {
     openOfficialPage: "Official profile",
     greetingList: "Greeting list",
     greeting: "Greeting",
-    card: "Greeting Card",
-    photo: "Photo",
+    card: "グリーティングカード",
+    photo: "フォト",
     member: "Member",
     filterTimeline: "Filters & Timeline",
     closePanel: "Close",
@@ -132,8 +132,8 @@ const I18N = {
     openOfficialPage: "멤버 공식 페이지",
     greetingList: "그리팅 목록",
     greeting: "그리팅",
-    card: "그리팅 카드",
-    photo: "포토",
+    card: "グリーティングカード",
+    photo: "フォト",
     member: "멤버",
     filterTimeline: "필터 및 타임라인",
     closePanel: "닫기",
@@ -193,7 +193,7 @@ function getStoredLocaleKey() {
 }
 
 function getInitialLocaleKey() {
-  return getStoredLocaleKey() || "zh-Hans";
+  return "zh-Hans";
 }
 
 function persistLocaleKey(localeKey) {

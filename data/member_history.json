@@ -1,0 +1,576 @@
+{
+  "version": 1,
+  "updatedAt": "2026-02-23T15:06:59Z",
+  "profileHistory": [
+    {
+      "single": "14th",
+      "updatedAt": "2026-02-02T00:00:00Z",
+      "sourceUrl": "https://sakurazaka46.com/s/s46/news/detail/R00521?ima=0000",
+      "image": {
+        "src": "data/member/archive/profile/14th_2026-02-02_35bfd0e42a_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/44a/4e7a8c8ab86faba15404dffa70f48/1000_1000_102400.jpg"
+      },
+      "singleTitle": "The growing up train"
+    },
+    {
+      "single": "13th",
+      "updatedAt": "2025-10-01T00:00:00Z",
+      "sourceUrl": "https://sakurazaka46.com/s/s46/news/detail/R00496?ima=0000",
+      "image": {
+        "src": "data/member/archive/profile/13th_2025-10-01_830a1b3268_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/833/2715333dadd74a1157f37fdbf0108/1000_1000_102400.jpg"
+      },
+      "singleTitle": "Addiction"
+    },
+    {
+      "single": "12th",
+      "updatedAt": "2025-06-04T00:00:00Z",
+      "sourceUrl": "https://sakurazaka46.com/s/s46/news/detail/R00461?ima=0000",
+      "image": {
+        "src": "data/member/archive/profile/12th_2025-06-04_258c824949_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/708/a6b4e3b457ed47f5694338bc46491/1000_1000_102400.jpg"
+      },
+      "singleTitle": "Make or Break"
+    },
+    {
+      "single": "11th",
+      "updatedAt": "2025-02-03T00:00:00Z",
+      "sourceUrl": "https://sakurazaka46.com/s/s46/news/detail/R00411?ima=0000",
+      "image": {
+        "src": "data/member/archive/profile/11th_2025-02-03_0fd80f7509_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/ea5/a2067241562a73164d6dbee181f64/1000_1000_102400.jpg"
+      },
+      "singleTitle": "UDAGAWA GENERATION"
+    },
+    {
+      "single": "10th",
+      "updatedAt": "2024-10-03T00:00:00Z",
+      "sourceUrl": "https://sakurazaka46.com/s/s46/news/detail/R00379?ima=0000",
+      "image": {
+        "src": "data/member/archive/profile/10th_2024-10-03_4264c11eed_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/85d/f84df7c62d914449bce4c1fdc86ea/1000_1000_102400.jpg"
+      },
+      "singleTitle": "I want tomorrow to come"
+    },
+    {
+      "single": "9th",
+      "updatedAt": "2024-06-06T00:00:00Z",
+      "sourceUrl": "https://sakurazaka46.com/s/s46/news/detail/R00337?ima=0000",
+      "image": {
+        "src": "data/member/archive/profile/9th_2024-06-06_419aac22dd_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/be0/fe91190770835022bc200192706bb/1000_1000_102400.jpg"
+      },
+      "singleTitle": "自業自得"
+    },
+    {
+      "single": "8th",
+      "updatedAt": "2024-02-04T00:00:00Z",
+      "sourceUrl": "https://sakurazaka46.com/s/s46/news/detail/R00299?ima=0000",
+      "image": {
+        "src": "data/member/archive/profile/8th_2024-02-04_25dab22917_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/180/606c2dc266ddd3747e7e21558556c/1000_1000_102400.jpg"
+      },
+      "singleTitle": "何歳の頃に戻りたいのか？"
+    },
+    {
+      "single": "7th",
+      "updatedAt": "2023-10-01T00:00:00Z",
+      "sourceUrl": "https://sakurazaka46.com/s/s46/news/detail/R00260?ima=0000",
+      "image": {
+        "src": "data/member/archive/profile/7th_2023-10-01_2cb8583b87_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/842/73cd105bf3acf943503d8249d69e4/1000_1000_102400.jpg"
+      },
+      "singleTitle": "承認欲求"
+    },
+    {
+      "single": "6th",
+      "updatedAt": "2023-06-07T00:00:00Z",
+      "sourceUrl": "https://sakurazaka46.com/s/s46/news/detail/R00229?ima=0000",
+      "image": {
+        "src": "data/member/archive/profile/6th_2023-06-07_da6a3b2c96_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/af7/a0011a634fa1ccec92d152ee39c91/1000_1000_102400.jpg"
+      },
+      "singleTitle": "Start over!"
+    },
+    {
+      "single": "debut",
+      "updatedAt": "2023-03-05T00:00:00Z",
+      "sourceUrl": "https://sakurazaka46.com/s/s46/news/detail/O00056?ima=0000",
+      "image": {
+        "src": "data/member/archive/profile/debut_2023-03-05_5117b6b5e9_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/ca0/572ecb7cb460dba8b46b387d34bd3/1000_1000_102400.jpg"
+      },
+      "singleTitle": "初披露"
+    }
+  ],
+  "greetingHistory": [
+    {
+      "month": "2026-02",
+      "updatedAt": "2026-02-23T14:01:44Z",
+      "sourceUrl": "https://sakurazaka46.com/s/s46/artist/62?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2026-02_aabd596b2d_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/0f7/6c97bdcc5ba81e889db0f29319efb/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2026-02_e18c9a16da_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/0f7/6c97bdcc5ba81e889db0f29319efb-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2026-01",
+      "updatedAt": "2026-01-21T13:31:17Z",
+      "sourceUrl": "https://web.archive.org/web/20260121133117id_/https://sakurazaka46.com/s/s46/page/greeting",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2026-01_40f8892dc0_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/7d2/c21f103d0ebad0135e6357e221402/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2026-01_0f1a165eed_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/7d2/c21f103d0ebad0135e6357e221402-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2025-12",
+      "updatedAt": "2025-12-11T03:36:16Z",
+      "sourceUrl": "https://web.archive.org/web/20251211033616id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2025-12_29c54ef350_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/e7e/2cfdad156bd6f6b0fb0cb61f11df2/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2025-12_8698cb9f0d_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/e7e/2cfdad156bd6f6b0fb0cb61f11df2-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2025-11",
+      "updatedAt": "2025-11-10T13:46:43Z",
+      "sourceUrl": "https://web.archive.org/web/20251110134643id_/https://sakurazaka46.com/s/s46/artist/62?ima=1123",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2025-11_d606f366bc_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/23a/fe253a1820e535ea0520556edbba1/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2025-11_d033c11f2e_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/23a/fe253a1820e535ea0520556edbba1-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2025-10",
+      "updatedAt": "2025-10-31T14:09:13Z",
+      "sourceUrl": "https://web.archive.org/web/20251031140913id_/https://sakurazaka46.com/s/s46/page/greeting",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2025-10_8f23d7d411_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/94c/9191f20d2686c68242afd68040376/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2025-10_1f3aeeb593_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/94c/9191f20d2686c68242afd68040376-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2025-09",
+      "updatedAt": "2025-09-07T15:29:25Z",
+      "sourceUrl": "https://web.archive.org/web/20250907152925id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2025-09_468da83afa_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/223/c8d53fa2435a0797b11b68621a185/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2025-09_acf09fdfc1_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/223/c8d53fa2435a0797b11b68621a185-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2025-08",
+      "updatedAt": "2025-08-26T01:02:11Z",
+      "sourceUrl": "https://web.archive.org/web/20250826010211id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2025-08_6f432ac3d5_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/3fb/3b20ad902b30dce13a4db04be7594/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2025-08_2b159d8774_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/3fb/3b20ad902b30dce13a4db04be7594-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2025-07",
+      "updatedAt": "2025-07-01T08:16:35Z",
+      "sourceUrl": "https://web.archive.org/web/20250701081635id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2025-07_bbed1bf757_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/144/f58e9c6ca21c07a8a8a8ed9a38c92/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2025-07_c842dcc968_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/144/f58e9c6ca21c07a8a8a8ed9a38c92-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2025-06",
+      "updatedAt": "2025-06-24T03:48:15Z",
+      "sourceUrl": "https://web.archive.org/web/20250624034815id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2025-06_ff65a1cf12_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/5fa/34d1bfe24e9d7a6763021d79f038f/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2025-06_503bac9ba6_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/5fa/34d1bfe24e9d7a6763021d79f038f-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2025-05",
+      "updatedAt": "2025-05-21T11:08:29Z",
+      "sourceUrl": "https://web.archive.org/web/20250521110829id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2025-05_77208ad757_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/23e/f8380250d426051d1b222cc7b5eba/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2025-05_d85d3d41c6_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/23e/f8380250d426051d1b222cc7b5eba-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2025-04",
+      "updatedAt": "2025-04-26T21:55:40Z",
+      "sourceUrl": "https://web.archive.org/web/20250426215540id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2025-04_5f322c0bbd_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/f3c/ee3e94f34ddb4c3ac8333e5face0a/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2025-04_1404155986_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/f3c/ee3e94f34ddb4c3ac8333e5face0a-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2025-03",
+      "updatedAt": "2025-03-29T17:59:56Z",
+      "sourceUrl": "https://web.archive.org/web/20250329175956id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2025-03_0005992217_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/307/fa6c145f6ecbee80283bbb5969c9f/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2025-03_d484cdd10f_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/307/fa6c145f6ecbee80283bbb5969c9f-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2025-02",
+      "updatedAt": "2025-02-19T08:11:37Z",
+      "sourceUrl": "https://web.archive.org/web/20250219081137id_/http://sakurazaka46.com/s/s46/page/greeting",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2025-02_77208ad757_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/23e/f8380250d426051d1b222cc7b5eba/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2025-02_d85d3d41c6_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/23e/f8380250d426051d1b222cc7b5eba-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2025-01",
+      "updatedAt": "2025-01-10T09:01:56Z",
+      "sourceUrl": "https://web.archive.org/web/20250110090156id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2025-01_f5d1f80841_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/27f/265a43f091ab8a7d991556b509109/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2025-01_c3c7f8e687_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/27f/265a43f091ab8a7d991556b509109-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2024-12",
+      "updatedAt": "2024-12-26T20:28:56Z",
+      "sourceUrl": "https://web.archive.org/web/20241226202856id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2024-12_a969c4ae96_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/cfd/8184c31d4ad401fa47f3b93da17b3/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2024-12_fa0b0391c8_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/cfd/8184c31d4ad401fa47f3b93da17b3-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2024-11",
+      "updatedAt": "2024-11-14T08:32:54Z",
+      "sourceUrl": "https://web.archive.org/web/20241114083254id_/https://sakurazaka46.com/s/s46/page/greeting",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2024-11_3d2da1918a_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/b45/83fd816ce0520891abf0e6f459100/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2024-11_16ad940dc6_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/b45/83fd816ce0520891abf0e6f459100-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2024-10",
+      "updatedAt": "2024-10-08T16:22:38Z",
+      "sourceUrl": "https://web.archive.org/web/20241008162238id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2024-10_c2de390480_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/c3f/c96483d9a287cdae1dada6a09cf5e/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2024-10_ffc31a4a9f_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/c3f/c96483d9a287cdae1dada6a09cf5e-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2024-09",
+      "updatedAt": "2024-09-19T11:38:46Z",
+      "sourceUrl": "https://web.archive.org/web/20240919113846id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2024-09_206d6d5e73_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/6f5/99af233bf93234e1d67ed0e59d42c/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2024-09_1bd683aaa2_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/6f5/99af233bf93234e1d67ed0e59d42c-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2024-08",
+      "updatedAt": "2024-08-07T15:11:24Z",
+      "sourceUrl": "https://web.archive.org/web/20240807151124id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2024-08_e50bd6cb45_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/736/7dfeec734dbf2f9344e3aafa615b4/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2024-08_6058952adb_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/736/7dfeec734dbf2f9344e3aafa615b4-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2024-07",
+      "updatedAt": "2024-07-09T02:29:20Z",
+      "sourceUrl": "https://web.archive.org/web/20240709022920id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2024-07_6fd4c15905_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/c38/d67c4a4924d0ba80a75cfde807d7b/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2024-07_6c3823f208_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/c38/d67c4a4924d0ba80a75cfde807d7b-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2024-06",
+      "updatedAt": "2024-06-06T02:41:22Z",
+      "sourceUrl": "https://web.archive.org/web/20240606024122id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2024-06_c9838ed990_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/9d5/a79a701bec9ecc9384cd89259363b/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2024-06_1d0cd16ffa_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/9d5/a79a701bec9ecc9384cd89259363b-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2024-05",
+      "updatedAt": "2024-05-25T20:21:15Z",
+      "sourceUrl": "https://web.archive.org/web/20240525202115id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2024-05_2a36465c09_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/875/0e87de528f6cd2e421e965b04b7d4/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2024-05_af2f3f328e_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/875/0e87de528f6cd2e421e965b04b7d4-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2024-04",
+      "updatedAt": "2024-04-10T06:01:31Z",
+      "sourceUrl": "https://web.archive.org/web/20240410060131id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2024-04_050c42727d_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/492/729bf1dce95f32db199f9bc9f9e40/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2024-04_c2e7c41fb8_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/492/729bf1dce95f32db199f9bc9f9e40-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2024-03",
+      "updatedAt": "2024-03-01T00:00:00Z",
+      "sourceUrl": "http://krsw.5ch.net/test/read.cgi/sakurazaka46/1723164478/",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2024-03_4189233183_a6c1d5686c5f7ca21e8d7c8fc2bf8.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/a3c/a6c1d5686c5f7ca21e8d7c8fc2bf8.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2024-03_7174702682_a6c1d5686c5f7ca21e8d7c8fc2bf8-01.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/a3c/a6c1d5686c5f7ca21e8d7c8fc2bf8-01.jpg"
+      }
+    },
+    {
+      "month": "2024-02",
+      "updatedAt": "2024-02-01T00:00:00Z",
+      "sourceUrl": "http://krsw.5ch.net/test/read.cgi/sakurazaka46/1723164478/",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2024-02_cc59daa480_ea6443f6fbf4e6a372fe7761f8386.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/0af/ea6443f6fbf4e6a372fe7761f8386.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2024-02_45da5f1981_ea6443f6fbf4e6a372fe7761f8386-01.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/0af/ea6443f6fbf4e6a372fe7761f8386-01.jpg"
+      }
+    },
+    {
+      "month": "2024-01",
+      "updatedAt": "2024-01-28T13:40:49Z",
+      "sourceUrl": "https://web.archive.org/web/20240128134049id_/https://sakurazaka46.com/s/s46/page/greeting",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2024-01_7fef32e2fb_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/261/1069de3097fe45a569c8ab4a87af0/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2024-01_f16fda237f_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/261/1069de3097fe45a569c8ab4a87af0-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2023-12",
+      "updatedAt": "2023-12-27T01:52:02Z",
+      "sourceUrl": "https://web.archive.org/web/20231227015202id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2023-12_7e6227e57e_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/a11/570a5f96f9c11ec7fc5683ea6b267/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2023-12_368608376a_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/a11/570a5f96f9c11ec7fc5683ea6b267-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2023-11",
+      "updatedAt": "2023-11-27T22:09:06Z",
+      "sourceUrl": "https://web.archive.org/web/20231127220906id_/https://sakurazaka46.com/s/s46/page/greeting?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2023-11_09edef14c8_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/06e/73aa707b7e67aa32bb0a25dc14e41/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2023-11_ad8339773f_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/06e/73aa707b7e67aa32bb0a25dc14e41-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2023-10",
+      "updatedAt": "2023-10-01T00:00:00Z",
+      "sourceUrl": "http://krsw.5ch.net/test/read.cgi/sakurazaka46/1723164478/",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2023-10_d04687d0d9_92f1731e4a74bee5c5e2a8471765b.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/8af/92f1731e4a74bee5c5e2a8471765b.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2023-10_ccb8455f4c_92f1731e4a74bee5c5e2a8471765b-01.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/8af/92f1731e4a74bee5c5e2a8471765b-01.jpg"
+      }
+    },
+    {
+      "month": "2023-09",
+      "updatedAt": "2023-09-01T00:00:00Z",
+      "sourceUrl": "http://krsw.5ch.net/test/read.cgi/sakurazaka46/1723164478/",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2023-09_a44ad942ee_e76c3ccbee98f95e08bb725f5fc0d.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/462/e76c3ccbee98f95e08bb725f5fc0d.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2023-09_caf438370e_e76c3ccbee98f95e08bb725f5fc0d-01.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/462/e76c3ccbee98f95e08bb725f5fc0d-01.jpg"
+      }
+    },
+    {
+      "month": "2023-08",
+      "updatedAt": "2023-08-01T00:00:00Z",
+      "sourceUrl": "http://krsw.5ch.net/test/read.cgi/sakurazaka46/1723164478/",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2023-08_6149ccb11f_5514f902e2c48f8a6f56e2eeddbe8.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/214/5514f902e2c48f8a6f56e2eeddbe8.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2023-08_83b205805b_5514f902e2c48f8a6f56e2eeddbe8-01.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/214/5514f902e2c48f8a6f56e2eeddbe8-01.jpg"
+      }
+    },
+    {
+      "month": "2023-07",
+      "updatedAt": "2023-07-01T00:00:00Z",
+      "sourceUrl": "http://krsw.5ch.net/test/read.cgi/sakurazaka46/1723164478/",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2023-07_4a6e1d4338_2175019b0807171c8afa3701f8b94.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/65a/2175019b0807171c8afa3701f8b94.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2023-07_4a2060270f_2175019b0807171c8afa3701f8b94-01.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/65a/2175019b0807171c8afa3701f8b94-01.jpg"
+      }
+    },
+    {
+      "month": "2023-06",
+      "updatedAt": "2023-06-27T02:32:35Z",
+      "sourceUrl": "https://web.archive.org/web/20230627023235id_/https://sakurazaka46.com/s/s46/artist/62?ima=0000",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2023-06_bfdf253bcd_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/5da/f7f7aa7a3abe9f0f59c3e0a2830e0/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2023-06_edf4272243_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/5da/f7f7aa7a3abe9f0f59c3e0a2830e0-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2023-05",
+      "updatedAt": "2023-05-12T09:42:18Z",
+      "sourceUrl": "https://web.archive.org/web/20230512094218id_/https://sakurazaka46.com/s/s46/artist/62?ima=0848",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2023-05_18ac04c347_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/565/937bb4a42e9af17333765bcea9a20/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2023-05_edb7b80b6e_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/565/937bb4a42e9af17333765bcea9a20-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2023-04",
+      "updatedAt": "2023-04-26T01:39:12Z",
+      "sourceUrl": "https://web.archive.org/web/20230426013912id_/https://sakurazaka46.com/s/s46/artist/62?ima=2822",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2023-04_1c3ac34719_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/fef/958716d598e7de3452b9ccc143c31/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2023-04_1e14c2eaad_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/fef/958716d598e7de3452b9ccc143c31-01/1000_1000_102400.jpg"
+      }
+    },
+    {
+      "month": "2023-03",
+      "updatedAt": "2023-03-21T20:02:58Z",
+      "sourceUrl": "https://web.archive.org/web/20230321200258id_/https://sakurazaka46.com/s/s46/artist/62?ima=5445",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2023-03_97b2de0101_9f798bf8febb8948ef92fb51d540e.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/23c/9f798bf8febb8948ef92fb51d540e.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2023-03_5117b6b5e9_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/ca0/572ecb7cb460dba8b46b387d34bd3/1000_1000_102400.jpg"
+      }
+    }
+  ]
+}

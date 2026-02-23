@@ -252,11 +252,12 @@ def save_remote_image(
     project_root: Path,
     image_sleep: float,
     referer: str,
+    force_download: bool = False,
 ) -> bool:
     absolute_path = project_root / relative_path
     absolute_path.parent.mkdir(parents=True, exist_ok=True)
 
-    if absolute_path.exists() and absolute_path.stat().st_size > 0:
+    if (not force_download) and absolute_path.exists() and absolute_path.stat().st_size > 0:
         return True
 
     try:
@@ -425,11 +426,18 @@ def localize_member_images(
     member: dict[str, object],
     project_root: Path,
     image_sleep: float,
+    previous_member: dict[str, object] | None = None,
 ) -> None:
     image_map = member.get("images", {})
     if not isinstance(image_map, dict):
         member["images"] = {}
         return
+
+    previous_images = {}
+    if isinstance(previous_member, dict):
+        raw_previous_images = previous_member.get("images", {})
+        if isinstance(raw_previous_images, dict):
+            previous_images = raw_previous_images
 
     localized: dict[str, dict[str, str]] = {}
     key_to_prefix = {
@@ -448,12 +456,21 @@ def localize_member_images(
         filename = safe_filename(original_name, f"{prefix}{ext}")
         relative_path = Path("data") / "member" / f"{prefix}_{filename}"
 
+        previous_remote = ""
+        previous_item = previous_images.get(key, "")
+        if isinstance(previous_item, dict):
+            previous_remote = str(previous_item.get("originalSrc") or "").strip()
+        elif isinstance(previous_item, str):
+            previous_remote = previous_item.strip()
+        force_download = bool(previous_remote) and previous_remote != remote_src
+
         success = save_remote_image(
             remote_src=remote_src,
             relative_path=relative_path,
             project_root=project_root,
             image_sleep=image_sleep,
             referer=MEMBER_URL,
+            force_download=force_download,
         )
 
         local_src = relative_path.as_posix() if success else remote_src
@@ -470,9 +487,23 @@ def fetch_member_profile(
     output_path: Path,
     image_sleep: float,
 ) -> dict[str, object]:
+    previous_member: dict[str, object] | None = None
+    if output_path.exists():
+        try:
+            payload = json.loads(output_path.read_text(encoding="utf-8"))
+            if isinstance(payload, dict):
+                previous_member = payload
+        except Exception:
+            previous_member = None
+
     member_html = fetch_text(MEMBER_URL)
     member = parse_member_profile(member_html)
-    localize_member_images(member, project_root=project_root, image_sleep=image_sleep)
+    localize_member_images(
+        member,
+        project_root=project_root,
+        image_sleep=image_sleep,
+        previous_member=previous_member,
+    )
     write_json(member, output_path)
     return member
 

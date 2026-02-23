@@ -220,9 +220,33 @@ const state = {
   loadingState: "loading",
   errorMessage: "",
   member: null,
+  memberHistory: null,
   memberLoadingState: "loading",
   memberErrorMessage: "",
 };
+
+function formatSingleLabel(single) {
+  const singleKey = String(single ?? "").trim();
+  if (!singleKey) return "";
+  if (singleKey.toLowerCase() === "debut") return "初披露";
+  return singleKey;
+}
+
+function resolveSingleTitle(_single, fallbackTitle = "") {
+  return String(fallbackTitle ?? "").trim();
+}
+
+function formatProfileMetaLabel(single, title = "") {
+  const base = `公式照 ${formatSingleLabel(single)}`.trim();
+  const resolvedTitle = String(title ?? "").trim();
+  if (!base) return "";
+  return resolvedTitle ? `${base} · ${resolvedTitle}` : base;
+}
+
+function formatGreetingMetaLabel(month) {
+  const monthText = String(month ?? "").trim();
+  return monthText ? `グリーティング ${monthText}` : "";
+}
 
 function t(key, variables = {}) {
   const table = I18N[state.localeKey] || I18N.en;
@@ -680,6 +704,50 @@ function normalizeMemberAttributes(attributes) {
     .filter((item) => item.label !== "" && item.value !== "");
 }
 
+function normalizeImageRecord(entry) {
+  if (!entry || typeof entry !== "object") return null;
+
+  const src = String(entry.src ?? "").trim();
+  const originalSrc = String(entry.originalSrc ?? "").trim();
+  if (!src && !originalSrc) return null;
+
+  return { src, originalSrc };
+}
+
+function normalizeProfileHistoryEntries(historyPayload) {
+  if (!historyPayload || typeof historyPayload !== "object") return [];
+
+  const raw = historyPayload.profileHistory;
+  if (!Array.isArray(raw)) return [];
+
+  return raw
+    .filter((item) => item && typeof item === "object")
+    .map((item) => ({
+      single: String(item.single ?? "").trim(),
+      singleTitle: String(item.singleTitle ?? item.title ?? "").trim(),
+      updatedAt: String(item.updatedAt ?? "").trim(),
+      image: normalizeImageRecord(item.image),
+    }))
+    .filter((item) => item.image && item.image.src);
+}
+
+function normalizeGreetingHistoryEntries(historyPayload) {
+  if (!historyPayload || typeof historyPayload !== "object") return [];
+
+  const raw = historyPayload.greetingHistory;
+  if (!Array.isArray(raw)) return [];
+
+  return raw
+    .filter((item) => item && typeof item === "object")
+    .map((item) => ({
+      month: String(item.month ?? "").trim(),
+      updatedAt: String(item.updatedAt ?? "").trim(),
+      greetingCard: normalizeImageRecord(item.greetingCard),
+      greetingPhoto: normalizeImageRecord(item.greetingPhoto),
+    }))
+    .filter((item) => (item.greetingCard && item.greetingCard.src) || (item.greetingPhoto && item.greetingPhoto.src));
+}
+
 function renderMemberPanel() {
   const panelBodyEl = memberPanelBodyEl || memberPanelEl;
   if (!panelBodyEl) return;
@@ -711,6 +779,8 @@ function renderMemberPanel() {
 
   const member = state.member;
   const images = member.images && typeof member.images === "object" ? member.images : {};
+  const profileHistory = normalizeProfileHistoryEntries(state.memberHistory);
+  const greetingHistory = normalizeGreetingHistoryEntries(state.memberHistory);
   const attributes = normalizeMemberAttributes(member.attributes);
   const sourceUrl =
     typeof member.sourceUrl === "string" && member.sourceUrl.trim() !== ""
@@ -728,17 +798,60 @@ function renderMemberPanel() {
   kanaEl.className = "member-kana";
   kanaEl.textContent = member.kana || "こじま なぎさ";
 
+  const latestProfileItem = profileHistory[0] || null;
+  const initialProfileSingle =
+    (typeof member.profileSingle === "string" && member.profileSingle.trim() !== "")
+      ? member.profileSingle.trim()
+      : (latestProfileItem?.single || "");
+  const initialProfileTitle = resolveSingleTitle(
+    initialProfileSingle,
+    latestProfileItem?.singleTitle || member.profileSingleTitle || "",
+  );
+
+  const initialGreetingMonth =
+    (typeof member.greetingMonth === "string" && member.greetingMonth.trim() !== "")
+      ? member.greetingMonth.trim()
+      : (greetingHistory[0]?.month || "");
+
+  const metaChips = [];
+  if (initialProfileSingle) {
+    metaChips.push({ kind: "profile", text: formatProfileMetaLabel(initialProfileSingle, initialProfileTitle) });
+  }
+  if (initialGreetingMonth) {
+    metaChips.push({ kind: "greeting", text: formatGreetingMetaLabel(initialGreetingMonth) });
+  }
+
+  let profileMetaChipEl = null;
+  let greetingMetaChipEl = null;
+
   headerEl.append(nameEl, kanaEl);
+  if (metaChips.length > 0) {
+    const metaWrapEl = document.createElement("div");
+    metaWrapEl.className = "member-current-meta";
+
+    metaChips.forEach((item) => {
+      const chip = document.createElement("span");
+      chip.className = "member-current-meta-chip";
+      chip.textContent = item.text;
+      if (item.kind === "profile") profileMetaChipEl = chip;
+      if (item.kind === "greeting") greetingMetaChipEl = chip;
+      metaWrapEl.appendChild(chip);
+    });
+
+    headerEl.appendChild(metaWrapEl);
+  }
   panelBodyEl.appendChild(headerEl);
 
-  const profileSrc = images.profile?.src;
+  const profileSrc = profileHistory[0]?.image?.src || images.profile?.src;
+  let profileImgEl = null;
   if (typeof profileSrc === "string" && profileSrc.trim() !== "") {
     const profileImg = document.createElement("img");
     profileImg.className = "member-photo-main";
     profileImg.src = profileSrc;
     profileImg.alt = `${member.name || "小島 凪紗"} 头像`;
     profileImg.loading = "lazy";
-    panelBodyEl.appendChild(profileImg);
+    profileImgEl = profileImg;
+    panelBodyEl.appendChild(profileImgEl);
   }
 
   if (attributes.length > 0) {
@@ -756,45 +869,204 @@ function renderMemberPanel() {
     panelBodyEl.appendChild(infoListEl);
   }
 
-  const greetingCardSrc = images.greetingCard?.src;
-  const greetingPhotoSrc = images.greetingPhoto?.src;
+  if (profileHistory.length > 0) {
+    const profileArchiveSection = document.createElement("section");
+    profileArchiveSection.className = "member-archive-controls";
 
-  if (
-    (typeof greetingCardSrc === "string" && greetingCardSrc.trim() !== "") ||
-    (typeof greetingPhotoSrc === "string" && greetingPhotoSrc.trim() !== "")
-  ) {
+    const titleRow = document.createElement("div");
+    titleRow.className = "member-archive-head";
+
+    const titleEl = document.createElement("h4");
+    titleEl.className = "member-history-title";
+    titleEl.textContent = "公式照アーカイブ";
+
+    const countEl = document.createElement("span");
+    countEl.className = "member-archive-count";
+    countEl.textContent = `${profileHistory.length}`;
+
+    const activeInfoEl = document.createElement("p");
+    activeInfoEl.className = "member-archive-current";
+
+    const chipsWrapEl = document.createElement("div");
+    chipsWrapEl.className = "member-archive-chip-row";
+
+    const chips = [];
+    const setProfileSelection = (index) => {
+      const safeIndex = Math.min(Math.max(index, 0), profileHistory.length - 1);
+      const item = profileHistory[safeIndex];
+      if (!item) return;
+      const singleTitle = resolveSingleTitle(item.single, item.singleTitle);
+
+      if (profileImgEl && item.image?.src) {
+        profileImgEl.src = item.image.src;
+        profileImgEl.alt = `${member.name || "小島 凪紗"} ${item.single || ""}`.trim();
+      }
+
+      const dateText = item.updatedAt ? item.updatedAt.slice(0, 10) : "";
+      activeInfoEl.textContent = [formatSingleLabel(item.single), singleTitle, dateText].filter(Boolean).join(" · ");
+      if (profileMetaChipEl) {
+        profileMetaChipEl.textContent = formatProfileMetaLabel(item.single, singleTitle);
+      }
+
+      chips.forEach((chip, chipIndex) => {
+        const active = chipIndex === safeIndex;
+        chip.classList.toggle("active", active);
+        chip.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+    };
+
+    profileHistory.forEach((item, index) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "member-archive-chip";
+      chip.textContent = formatSingleLabel(item.single) || `#${profileHistory.length - index}`;
+      const singleTitle = resolveSingleTitle(item.single, item.singleTitle);
+      if (singleTitle) {
+        chip.title = singleTitle;
+      }
+      chip.setAttribute("aria-pressed", "false");
+      chip.addEventListener("click", () => setProfileSelection(index));
+      chips.push(chip);
+      chipsWrapEl.appendChild(chip);
+    });
+
+    setProfileSelection(0);
+    titleRow.append(titleEl, countEl);
+    profileArchiveSection.append(titleRow, activeInfoEl, chipsWrapEl);
+    panelBodyEl.appendChild(profileArchiveSection);
+  }
+
+  if (greetingHistory.length > 0) {
     const greetingWrapEl = document.createElement("section");
-    greetingWrapEl.className = "member-greeting";
+    greetingWrapEl.className = "member-greeting member-greeting-archive";
+
+    const headEl = document.createElement("div");
+    headEl.className = "member-archive-head";
+
+    const titleEl = document.createElement("h4");
+    titleEl.className = "member-history-title";
+    titleEl.textContent = "月別アーカイブ";
+
+    const countEl = document.createElement("span");
+    countEl.className = "member-archive-count";
+    countEl.textContent = `${greetingHistory.length}`;
+
+    headEl.append(titleEl, countEl);
+
+    const selectedMetaEl = document.createElement("p");
+    selectedMetaEl.className = "member-archive-current";
 
     const gridEl = document.createElement("div");
-    gridEl.className = "member-greeting-grid";
+    gridEl.className = "member-greeting-grid member-greeting-grid-focus";
 
-    if (typeof greetingCardSrc === "string" && greetingCardSrc.trim() !== "") {
-      const cardFigure = document.createElement("figure");
-      const cardImg = document.createElement("img");
-      cardImg.src = greetingCardSrc;
-      cardImg.alt = t("card");
-      cardImg.loading = "lazy";
-      const cardCaption = document.createElement("figcaption");
-      cardCaption.textContent = t("card");
-      cardFigure.append(cardImg, cardCaption);
-      gridEl.appendChild(cardFigure);
-    }
+    const cardFigure = document.createElement("figure");
+    const cardImg = document.createElement("img");
+    cardImg.loading = "lazy";
+    const cardCaption = document.createElement("figcaption");
+    cardCaption.textContent = "グリーティングカード";
+    cardFigure.append(cardImg, cardCaption);
 
-    if (typeof greetingPhotoSrc === "string" && greetingPhotoSrc.trim() !== "") {
-      const photoFigure = document.createElement("figure");
-      const photoImg = document.createElement("img");
-      photoImg.src = greetingPhotoSrc;
-      photoImg.alt = t("photo");
-      photoImg.loading = "lazy";
-      const photoCaption = document.createElement("figcaption");
-      photoCaption.textContent = t("photo");
-      photoFigure.append(photoImg, photoCaption);
-      gridEl.appendChild(photoFigure);
-    }
+    const photoFigure = document.createElement("figure");
+    const photoImg = document.createElement("img");
+    photoImg.loading = "lazy";
+    const photoCaption = document.createElement("figcaption");
+    photoCaption.textContent = "フォト";
+    photoFigure.append(photoImg, photoCaption);
 
-    greetingWrapEl.appendChild(gridEl);
+    gridEl.append(cardFigure, photoFigure);
+
+    const monthsWrapEl = document.createElement("div");
+    monthsWrapEl.className = "member-archive-chip-row member-month-chip-row";
+    const monthChips = [];
+
+    const setGreetingSelection = (index) => {
+      const safeIndex = Math.min(Math.max(index, 0), greetingHistory.length - 1);
+      const item = greetingHistory[safeIndex];
+      if (!item) return;
+
+      const dateText = item.updatedAt ? item.updatedAt.slice(0, 10) : "";
+      selectedMetaEl.textContent = [item.month || "", dateText].filter(Boolean).join(" · ");
+      if (greetingMetaChipEl) {
+        greetingMetaChipEl.textContent = formatGreetingMetaLabel(item.month);
+      }
+
+      if (item.greetingCard?.src) {
+        cardFigure.hidden = false;
+        cardImg.src = item.greetingCard.src;
+        cardImg.alt = "グリーティングカード";
+      } else {
+        cardFigure.hidden = true;
+      }
+
+      if (item.greetingPhoto?.src) {
+        photoFigure.hidden = false;
+        photoImg.src = item.greetingPhoto.src;
+        photoImg.alt = "フォト";
+      } else {
+        photoFigure.hidden = true;
+      }
+
+      monthChips.forEach((chip, chipIndex) => {
+        const active = chipIndex === safeIndex;
+        chip.classList.toggle("active", active);
+        chip.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+    };
+
+    greetingHistory.forEach((item, index) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "member-archive-chip member-month-chip";
+      chip.textContent = item.month || `#${greetingHistory.length - index}`;
+      chip.setAttribute("aria-pressed", "false");
+      chip.addEventListener("click", () => setGreetingSelection(index));
+      monthChips.push(chip);
+      monthsWrapEl.appendChild(chip);
+    });
+
+    setGreetingSelection(0);
+    greetingWrapEl.append(headEl, selectedMetaEl, gridEl, monthsWrapEl);
     panelBodyEl.appendChild(greetingWrapEl);
+  } else {
+    const greetingCardSrc = images.greetingCard?.src;
+    const greetingPhotoSrc = images.greetingPhoto?.src;
+    if (
+      (typeof greetingCardSrc === "string" && greetingCardSrc.trim() !== "") ||
+      (typeof greetingPhotoSrc === "string" && greetingPhotoSrc.trim() !== "")
+    ) {
+      const greetingWrapEl = document.createElement("section");
+      greetingWrapEl.className = "member-greeting";
+
+      const gridEl = document.createElement("div");
+      gridEl.className = "member-greeting-grid";
+
+      if (typeof greetingCardSrc === "string" && greetingCardSrc.trim() !== "") {
+        const cardFigure = document.createElement("figure");
+        const cardImg = document.createElement("img");
+        cardImg.src = greetingCardSrc;
+        cardImg.alt = t("card");
+        cardImg.loading = "lazy";
+        const cardCaption = document.createElement("figcaption");
+        cardCaption.textContent = t("card");
+        cardFigure.append(cardImg, cardCaption);
+        gridEl.appendChild(cardFigure);
+      }
+
+      if (typeof greetingPhotoSrc === "string" && greetingPhotoSrc.trim() !== "") {
+        const photoFigure = document.createElement("figure");
+        const photoImg = document.createElement("img");
+        photoImg.src = greetingPhotoSrc;
+        photoImg.alt = t("photo");
+        photoImg.loading = "lazy";
+        const photoCaption = document.createElement("figcaption");
+        photoCaption.textContent = t("photo");
+        photoFigure.append(photoImg, photoCaption);
+        gridEl.appendChild(photoFigure);
+      }
+
+      greetingWrapEl.appendChild(gridEl);
+      panelBodyEl.appendChild(greetingWrapEl);
+    }
   }
 
   const actionsEl = document.createElement("div");
@@ -911,9 +1183,10 @@ async function init() {
   renderDetail();
   renderMemberPanel();
 
-  const [postsResult, memberResult] = await Promise.allSettled([
+  const [postsResult, memberResult, memberHistoryResult] = await Promise.allSettled([
     fetchJson("data/posts.json"),
     fetchJson("data/member.json"),
+    fetchJson("data/member_history.json"),
   ]);
 
   if (memberResult.status === "fulfilled" && memberResult.value && typeof memberResult.value === "object") {
@@ -927,6 +1200,17 @@ async function init() {
       "[archive] member init failed:",
       memberResult.status === "rejected" ? memberResult.reason : memberResult.value,
     );
+  }
+  renderMemberPanel();
+
+  if (
+    memberHistoryResult.status === "fulfilled" &&
+    memberHistoryResult.value &&
+    typeof memberHistoryResult.value === "object"
+  ) {
+    state.memberHistory = memberHistoryResult.value;
+  } else {
+    state.memberHistory = null;
   }
   renderMemberPanel();
 

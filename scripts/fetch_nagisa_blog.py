@@ -8,6 +8,7 @@ Use --full to rebuild all posts.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -30,6 +31,20 @@ USER_AGENT = (
     "AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/122.0.0.0 Safari/537.36"
 )
+
+DEFAULT_SINGLE_TITLES_PATH = Path("data/member_single_titles.json")
+DEFAULT_SINGLE_TITLES: dict[str, str] = {
+    "debut": "初披露",
+    "6th": "Start over!",
+    "7th": "承認欲求",
+    "8th": "何歳の頃に戻りたいのか？",
+    "9th": "自業自得",
+    "10th": "I want tomorrow to come",
+    "11th": "UDAGAWA GENERATION",
+    "12th": "Make or Break",
+    "13th": "Addiction",
+    "14th": "The growing up train",
+}
 
 
 def fetch_text(url: str, timeout: int = 30, retries: int = 3, referer: str | None = None) -> str:
@@ -482,10 +497,265 @@ def localize_member_images(
     member["images"] = localized
 
 
+def ordinal_suffix(number: int) -> str:
+    if 10 <= number % 100 <= 20:
+        return "th"
+    return {1: "st", 2: "nd", 3: "rd"}.get(number % 10, "th")
+
+
+def detect_single_label_from_image_url(remote_src: str) -> str | None:
+    path = urlparse(remote_src).path
+    match = re.search(r"/images/(\d+)/", path)
+    if not match:
+        return None
+
+    try:
+        single_number = int(match.group(1))
+    except ValueError:
+        return None
+
+    return f"{single_number}{ordinal_suffix(single_number)}"
+
+
+def load_single_titles(single_titles_path: Path) -> dict[str, str]:
+    table = dict(DEFAULT_SINGLE_TITLES)
+    if not single_titles_path.exists():
+        return table
+
+    try:
+        payload = json.loads(single_titles_path.read_text(encoding="utf-8"))
+    except Exception:
+        return table
+
+    if not isinstance(payload, dict):
+        return table
+
+    for key, value in payload.items():
+        single_key = str(key).strip()
+        title = str(value).strip()
+        if single_key and title:
+            table[single_key] = title
+    return table
+
+
+def resolve_single_title(single_label: str, single_titles: dict[str, str]) -> str:
+    label = str(single_label).strip()
+    if not label:
+        return ""
+    return str(single_titles.get(label, "")).strip()
+
+
+def current_tokyo_month() -> str:
+    # Official greeting card/photo updates are monthly in JST.
+    return time.strftime("%Y-%m", time.gmtime(time.time() + 9 * 3600))
+
+
+def load_member_history(history_output_path: Path) -> dict[str, object]:
+    if not history_output_path.exists():
+        return {"version": 1, "profileHistory": [], "greetingHistory": []}
+
+    try:
+        payload = json.loads(history_output_path.read_text(encoding="utf-8"))
+    except Exception:
+        return {"version": 1, "profileHistory": [], "greetingHistory": []}
+
+    if not isinstance(payload, dict):
+        return {"version": 1, "profileHistory": [], "greetingHistory": []}
+
+    profile_history = payload.get("profileHistory", [])
+    greeting_history = payload.get("greetingHistory", [])
+
+    return {
+        "version": int(payload.get("version", 1)),
+        "updatedAt": str(payload.get("updatedAt", "")).strip(),
+        "profileHistory": profile_history if isinstance(profile_history, list) else [],
+        "greetingHistory": greeting_history if isinstance(greeting_history, list) else [],
+    }
+
+
+def archive_member_image(
+    remote_src: str,
+    archive_group: str,
+    archive_key: str,
+    project_root: Path,
+    image_sleep: float,
+) -> str:
+    if not remote_src:
+        return ""
+
+    ext = resolve_ext_from_url(remote_src)
+    digest = hashlib.sha1(remote_src.encode("utf-8")).hexdigest()[:10]
+    original_name = Path(urlparse(remote_src).path).name
+    filename = safe_filename(original_name, f"{archive_group}{ext}")
+    safe_key = re.sub(r"[^0-9A-Za-z_-]+", "_", archive_key).strip("_") or "unknown"
+    relative_path = Path("data") / "member" / "archive" / archive_group / f"{safe_key}_{digest}_{filename}"
+
+    success = save_remote_image(
+        remote_src=remote_src,
+        relative_path=relative_path,
+        project_root=project_root,
+        image_sleep=image_sleep,
+        referer=MEMBER_URL,
+    )
+    return relative_path.as_posix() if success else remote_src
+
+
+def extract_original_src(image_entry: object) -> str:
+    if isinstance(image_entry, dict):
+        return str(image_entry.get("originalSrc") or "").strip()
+    if isinstance(image_entry, str):
+        return image_entry.strip()
+    return ""
+
+
+def upsert_member_history(
+    member: dict[str, object],
+    history_output_path: Path,
+    project_root: Path,
+    image_sleep: float,
+    single_titles: dict[str, str],
+) -> dict[str, object]:
+    history = load_member_history(history_output_path)
+    now_iso = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    images = member.get("images", {})
+    if not isinstance(images, dict):
+        images = {}
+
+    profile_history = history.get("profileHistory", [])
+    if not isinstance(profile_history, list):
+        profile_history = []
+
+    greeting_history = history.get("greetingHistory", [])
+    if not isinstance(greeting_history, list):
+        greeting_history = []
+
+    # Profile photo archive (single-based).
+    profile_entry = images.get("profile", {})
+    profile_remote = extract_original_src(profile_entry)
+    if profile_remote:
+        latest_profile = profile_history[0] if profile_history and isinstance(profile_history[0], dict) else None
+        latest_remote = ""
+        if isinstance(latest_profile, dict):
+            latest_remote = extract_original_src(latest_profile.get("image"))
+
+        if latest_remote != profile_remote:
+            single_label = detect_single_label_from_image_url(profile_remote) or "unknown"
+            archive_src = archive_member_image(
+                remote_src=profile_remote,
+                archive_group="profile",
+                archive_key=f"{single_label}_{now_iso[:10]}",
+                project_root=project_root,
+                image_sleep=image_sleep,
+            )
+            profile_history.insert(
+                0,
+                {
+                    "single": single_label,
+                    "singleTitle": resolve_single_title(single_label, single_titles),
+                    "updatedAt": now_iso,
+                    "image": {
+                        "src": archive_src,
+                        "originalSrc": profile_remote,
+                    },
+                },
+            )
+
+    # Greeting card/photo archive (monthly-based, append when image set changes).
+    greeting_card_entry = images.get("greetingCard", {})
+    greeting_photo_entry = images.get("greetingPhoto", {})
+    greeting_card_remote = extract_original_src(greeting_card_entry)
+    greeting_photo_remote = extract_original_src(greeting_photo_entry)
+
+    if greeting_card_remote or greeting_photo_remote:
+        latest_greeting = greeting_history[0] if greeting_history and isinstance(greeting_history[0], dict) else None
+        latest_card_remote = ""
+        latest_photo_remote = ""
+        if isinstance(latest_greeting, dict):
+            latest_card_remote = extract_original_src(latest_greeting.get("greetingCard"))
+            latest_photo_remote = extract_original_src(latest_greeting.get("greetingPhoto"))
+
+        if latest_card_remote != greeting_card_remote or latest_photo_remote != greeting_photo_remote:
+            month_key = current_tokyo_month()
+            archived_card_src = archive_member_image(
+                remote_src=greeting_card_remote,
+                archive_group="greeting_card",
+                archive_key=month_key,
+                project_root=project_root,
+                image_sleep=image_sleep,
+            ) if greeting_card_remote else ""
+            archived_photo_src = archive_member_image(
+                remote_src=greeting_photo_remote,
+                archive_group="greeting_photo",
+                archive_key=month_key,
+                project_root=project_root,
+                image_sleep=image_sleep,
+            ) if greeting_photo_remote else ""
+
+            new_entry = {
+                "month": month_key,
+                "updatedAt": now_iso,
+                "greetingCard": {
+                    "src": archived_card_src,
+                    "originalSrc": greeting_card_remote,
+                } if greeting_card_remote else {},
+                "greetingPhoto": {
+                    "src": archived_photo_src,
+                    "originalSrc": greeting_photo_remote,
+                } if greeting_photo_remote else {},
+            }
+
+            same_month_index = next(
+                (
+                    idx
+                    for idx, item in enumerate(greeting_history)
+                    if isinstance(item, dict) and str(item.get("month", "")).strip() == month_key
+                ),
+                None,
+            )
+            if same_month_index is None:
+                greeting_history.insert(0, new_entry)
+            else:
+                greeting_history[same_month_index] = new_entry
+                if same_month_index != 0:
+                    moved = greeting_history.pop(same_month_index)
+                    greeting_history.insert(0, moved)
+
+    # Keep the newest entries first and cap size for long-term use.
+    for item in profile_history:
+        if not isinstance(item, dict):
+            continue
+        single_label = str(item.get("single", "")).strip()
+        if not single_label:
+            continue
+        if not str(item.get("singleTitle", "")).strip():
+            title = resolve_single_title(single_label, single_titles)
+            if title:
+                item["singleTitle"] = title
+
+    profile_history = profile_history[:36]
+    greeting_history = greeting_history[:36]
+
+    history["profileHistory"] = profile_history
+    history["greetingHistory"] = greeting_history
+    history["updatedAt"] = now_iso
+    history["version"] = 1
+
+    if profile_history and isinstance(profile_history[0], dict):
+        member["profileSingle"] = str(profile_history[0].get("single", "")).strip()
+        member["profileSingleTitle"] = str(profile_history[0].get("singleTitle", "")).strip()
+    if greeting_history and isinstance(greeting_history[0], dict):
+        member["greetingMonth"] = str(greeting_history[0].get("month", "")).strip()
+
+    write_json(history, history_output_path)
+    return history
+
+
 def fetch_member_profile(
     project_root: Path,
     output_path: Path,
+    history_output_path: Path,
     image_sleep: float,
+    single_titles: dict[str, str],
 ) -> dict[str, object]:
     previous_member: dict[str, object] | None = None
     if output_path.exists():
@@ -503,6 +773,13 @@ def fetch_member_profile(
         project_root=project_root,
         image_sleep=image_sleep,
         previous_member=previous_member,
+    )
+    upsert_member_history(
+        member=member,
+        history_output_path=history_output_path,
+        project_root=project_root,
+        image_sleep=image_sleep,
+        single_titles=single_titles,
     )
     write_json(member, output_path)
     return member
@@ -592,6 +869,12 @@ def parse_args() -> argparse.Namespace:
         help="Member output json path (default: data/member.json)",
     )
     parser.add_argument(
+        "--member-history-output",
+        type=Path,
+        default=Path("data/member_history.json"),
+        help="Member history output json path (default: data/member_history.json)",
+    )
+    parser.add_argument(
         "--sleep",
         type=float,
         default=0.12,
@@ -619,6 +902,17 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Skip member profile fetching",
     )
+    parser.add_argument(
+        "--member-only",
+        action="store_true",
+        help="Only update member profile + member history, skip blog posts",
+    )
+    parser.add_argument(
+        "--single-titles",
+        type=Path,
+        default=DEFAULT_SINGLE_TITLES_PATH,
+        help="Single title mapping json path (default: data/member_single_titles.json)",
+    )
     return parser.parse_args()
 
 
@@ -627,6 +921,24 @@ def main() -> int:
 
     output_path = args.output
     project_root = Path.cwd()
+    single_titles = load_single_titles(args.single_titles)
+
+    if args.member_only:
+        print("Member-only mode: skip blog post sync", file=sys.stderr)
+        if not args.skip_member:
+            try:
+                member = fetch_member_profile(
+                    project_root=project_root,
+                    output_path=args.member_output,
+                    history_output_path=args.member_history_output,
+                    image_sleep=max(0.0, args.image_sleep),
+                    single_titles=single_titles,
+                )
+                print(f"Wrote member profile for {member.get('name', 'member')} to {args.member_output}")
+                print(f"Wrote member archive history to {args.member_history_output}")
+            except Exception as err:
+                print(f"[warn] member profile update failed: {err}", file=sys.stderr)
+        return 0
 
     existing_posts = [] if args.full else load_existing_posts(output_path)
     existing_ids = {int(post["id"]) for post in existing_posts if "id" in post}
@@ -661,9 +973,12 @@ def main() -> int:
             member = fetch_member_profile(
                 project_root=project_root,
                 output_path=args.member_output,
+                history_output_path=args.member_history_output,
                 image_sleep=max(0.0, args.image_sleep),
+                single_titles=single_titles,
             )
             print(f"Wrote member profile for {member.get('name', 'member')} to {args.member_output}")
+            print(f"Wrote member archive history to {args.member_history_output}")
         except Exception as err:
             print(f"[warn] member profile update failed: {err}", file=sys.stderr)
 

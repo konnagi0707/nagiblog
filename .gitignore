@@ -3,5 +3,6 @@ __pycache__/
 
 data/posts.json
 data/member.json
+data/member_history.json
 data/images/
 data/member/

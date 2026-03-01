@@ -1,6 +1,7 @@
 const DEFAULT_MEMBER_SOURCE_URL = "https://sakurazaka46.com/s/s46/artist/62?ima=0000";
 const LOCALE_STORAGE_KEY = "nagiblog_locale";
 const SUPPORTED_LOCALES = ["zh-Hans", "zh-Hant", "en", "ja", "ko"];
+const DATA_CACHE_BUST = "20260301-1";
 
 const I18N = {
   "zh-Hans": {
@@ -1159,9 +1160,11 @@ function initializeLanguageSwitcher() {
 }
 
 async function fetchJson(path) {
-  const response = await fetch(path);
+  const separator = path.includes("?") ? "&" : "?";
+  const bustPath = `${path}${separator}v=${DATA_CACHE_BUST}`;
+  const response = await fetch(bustPath, { cache: "no-store" });
   if (!response.ok) {
-    throw new Error(`${path} HTTP ${response.status}`);
+    throw new Error(`${bustPath} HTTP ${response.status}`);
   }
   return response.json();
 }

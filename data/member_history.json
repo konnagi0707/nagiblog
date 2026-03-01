@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-03-01T13:10:28Z",
+  "updatedAt": "2026-03-01T15:35:30Z",
   "profileHistory": [
     {
       "single": "14th",
@@ -106,7 +106,7 @@
   "greetingHistory": [
     {
       "month": "2026-03",
-      "updatedAt": "2026-03-01T07:05:17Z",
+      "updatedAt": "2026-03-01T15:35:30Z",
       "greetingCard": {
         "src": "data/member/archive/greeting_card/2026-03_f9e19355dc_1000_1000_102400.jpg",
         "originalSrc": "https://sakurazaka46.com/images/14/147/0f19cbc4400f8b86779b8ebebd9bd/1000_1000_102400.jpg"

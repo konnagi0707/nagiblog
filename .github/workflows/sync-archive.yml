@@ -3,10 +3,8 @@ name: Sync Archive Data
 on:
   workflow_dispatch:
   schedule:
-    # Daily full sync (posts + member + history).
-    - cron: "17 3 * * *"
-    # Month-start fast lane: refresh member/greeting multiple times per day.
-    - cron: "17 */6 1-7 * *"
+    # Full sync every 6 hours so new blogs do not wait until the next day.
+    - cron: "17 */6 * * *"
 
 permissions:
   contents: write
@@ -28,22 +26,13 @@ jobs:
 
       - name: Sync archive data
         run: |
-          if [[ "${{ github.event_name }}" == "schedule" && "${{ github.event.schedule }}" == "17 */6 1-7 * *" ]]; then
-            echo "Month-start fast lane: member-only sync"
-            python3 scripts/fetch_nagisa_blog.py \
-              --member-only \
-              --member-output data/member.json \
-              --member-history-output data/member_history.json \
-              --image-sleep 0.03
-          else
-            echo "Full sync: posts + member + history"
-            python3 scripts/fetch_nagisa_blog.py \
-              --output data/posts.json \
-              --member-output data/member.json \
-              --member-history-output data/member_history.json \
-              --sleep 0.12 \
-              --image-sleep 0.03
-          fi
+          echo "Full sync: posts + member + history"
+          python3 scripts/fetch_nagisa_blog.py \
+            --output data/posts.json \
+            --member-output data/member.json \
+            --member-history-output data/member_history.json \
+            --sleep 0.12 \
+            --image-sleep 0.03
 
       - name: Commit and push if changed
         run: |

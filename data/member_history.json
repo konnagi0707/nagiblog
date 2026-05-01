@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-05-01T04:31:33Z",
+  "updatedAt": "2026-05-01T08:25:53Z",
   "profileHistory": [
     {
       "single": "14th",
@@ -104,6 +104,18 @@
     }
   ],
   "greetingHistory": [
+    {
+      "month": "2026-05",
+      "updatedAt": "2026-05-01T08:25:53Z",
+      "greetingCard": {
+        "src": "data/member/archive/greeting_card/2026-05_dd381d3b86_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/4fb/d195965252f94b4d8139f5701d710/1000_1000_102400.jpg"
+      },
+      "greetingPhoto": {
+        "src": "data/member/archive/greeting_photo/2026-05_799a3f1429_1000_1000_102400.jpg",
+        "originalSrc": "https://sakurazaka46.com/images/14/4fb/d195965252f94b4d8139f5701d710-01/1000_1000_102400.jpg"
+      }
+    },
     {
       "month": "2026-04",
       "updatedAt": "2026-04-01T07:56:05Z",
@@ -555,19 +567,6 @@
       "greetingPhoto": {
         "src": "data/member/archive/greeting_photo/2023-06_edf4272243_1000_1000_102400.jpg",
         "originalSrc": "https://sakurazaka46.com/images/14/5da/f7f7aa7a3abe9f0f59c3e0a2830e0-01/1000_1000_102400.jpg"
-      }
-    },
-    {
-      "month": "2023-05",
-      "updatedAt": "2023-05-12T09:42:18Z",
-      "sourceUrl": "https://web.archive.org/web/20230512094218id_/https://sakurazaka46.com/s/s46/artist/62?ima=0848",
-      "greetingCard": {
-        "src": "data/member/archive/greeting_card/2023-05_18ac04c347_1000_1000_102400.jpg",
-        "originalSrc": "https://sakurazaka46.com/images/14/565/937bb4a42e9af17333765bcea9a20/1000_1000_102400.jpg"
-      },
-      "greetingPhoto": {
-        "src": "data/member/archive/greeting_photo/2023-05_edb7b80b6e_1000_1000_102400.jpg",
-        "originalSrc": "https://sakurazaka46.com/images/14/565/937bb4a42e9af17333765bcea9a20-01/1000_1000_102400.jpg"
       }
     }
   ]

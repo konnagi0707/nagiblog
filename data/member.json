@@ -30,7 +30,7 @@
   "images": {
     "profile": {
       "src": "data/member/profile_1000_1000_102400.jpg",
-      "originalSrc": "https://sakurazaka46.com/images/14/44a/4e7a8c8ab86faba15404dffa70f48/1000_1000_102400.jpg"
+      "originalSrc": "https://sakurazaka46.com/images/14/1c6/fa68af8880f33e0f0bd1b0fa55b23/1000_1000_102400.jpg"
     },
     "greetingCard": {
       "src": "data/member/greeting_card_1000_1000_102400.jpg",
@@ -41,7 +41,7 @@
       "originalSrc": "https://sakurazaka46.com/images/14/4fb/d195965252f94b4d8139f5701d710-01/1000_1000_102400.jpg"
     }
   },
-  "updatedAt": "2026-05-24T19:42:12Z",
+  "updatedAt": "2026-05-25T04:54:42Z",
   "profileSingle": "14th",
   "profileSingleTitle": "The growing up train",
   "greetingMonth": "2026-05"

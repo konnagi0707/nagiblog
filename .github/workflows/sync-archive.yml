@@ -3,15 +3,19 @@ name: Sync Archive Data
 on:
   workflow_dispatch:
   schedule:
-    # Full sync every 6 hours so new blogs do not wait until the next day.
-    - cron: "17 */6 * * *"
+    # Check every two hours, offset from the other archive workflow.
+    - cron: "47 */2 * * *"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.changes.outputs.changed }}
 
     steps:
       - name: Checkout
@@ -34,10 +38,17 @@ jobs:
             --sleep 0.12 \
             --image-sleep 0.03
 
-      - name: Commit and push if changed
+      - name: Commit and push meaningful changes
+        id: changes
+        shell: bash
         run: |
-          if git diff --quiet -- data/posts.json data/member.json data/member_history.json data/images data/member; then
-            echo "No archive changes."
+          if git diff --quiet -I '"updatedAt":' -- \
+               data/posts.json data/member.json data/member_history.json data/images data/member && \
+             test -z "$(git ls-files --others --exclude-standard -- data/images data/member)"; then
+            git restore -- \
+              data/posts.json data/member.json data/member_history.json data/images data/member
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No blog or profile changes."
             exit 0
           fi
 
@@ -47,3 +58,44 @@ jobs:
           git add data/posts.json data/member.json data/member_history.json data/images data/member
           git commit -m "chore: sync archive data"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs: sync
+    if: needs.sync.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: "pages"
+      cancel-in-progress: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout latest archive
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Prepare static files
+        run: |
+          mkdir -p dist
+          cp index.html styles.css app.js portrait.jpeg portrait.png dist/
+          cp -R data dist/data
+          touch dist/.nojekyll
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
